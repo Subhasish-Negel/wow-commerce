@@ -76,11 +76,15 @@ class AuthController {
           });
         }
 
-        return res.status(401).json({ errors: "Invalid Password" });
+        return res.status(401).json({
+          error: {
+            message: "Invalid Password",
+          },
+        });
       }
       return res.status(401).json({
-        errors: {
-          email: "No user found with this email",
+        error: {
+          message: "No user found with this email",
         },
       });
     } catch (error) {

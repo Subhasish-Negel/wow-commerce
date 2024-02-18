@@ -2,7 +2,7 @@
 import React, { useEffect } from "react";
 import { motion } from "framer-motion";
 import { LampContainer } from "../ui/lamp";
-import { ProfileForm } from "@/components/Login/LoginForm";
+import { LoginForm } from "@/components/Login/Login-Form";
 import toast, { Toaster, useToasterStore } from "react-hot-toast";
 
 export default function Login() {
@@ -28,14 +28,14 @@ export default function Login() {
             duration: 0.8,
             ease: "easeInOut",
           }}
-          className="w-full bg-black/40 py-2 px-6 rounded-lg "
+          className="w-full bg-black/50 py-2 px-6 rounded-lg "
         >
           <div className="">
             <p className="bg-clip-text text-transparent drop-shadow-2xl bg-gradient-to-b from-white/80 to-white/20 text-2xl font-bold text-center text">
-              Create Account
+              User Login
             </p>
 
-            <ProfileForm />
+            <LoginForm />
           </div>
         </motion.h1>
       </LampContainer>
@@ -44,7 +44,7 @@ export default function Login() {
         reverseOrder={false}
         gutter={20}
         toastOptions={{
-          duration: 3000,
+          duration: 4000,
         }}
       />
     </>
