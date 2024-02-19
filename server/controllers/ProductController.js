@@ -52,14 +52,14 @@ export class ProductController {
   static async index(req, res) {
     try {
       let page = Number(req.query.page) || 1;
-      let limit = Number(req.query.limit) || 2;
+      let limit = Number(req.query.limit) || 20;
 
       if (page <= 0) {
         page = 1;
       }
 
-      if (limit <= 0 || limit > 5) {
-        limit = 5;
+      if (limit <= 0 || limit > 20) {
+        limit = 20;
       }
 
       const skip = (page - 1) * limit;
