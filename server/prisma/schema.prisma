@@ -9,7 +9,7 @@ datasource db {
 
 model Users {
   id         String   @id @default(auto()) @map("_id") @db.ObjectId
-  role       String  @default("user")
+  role       String   @default("user")
   name       String
   email      String   @unique
   password   String
@@ -28,4 +28,26 @@ model Blogs {
   image_id   String
   created_at DateTime @default(now())
   updated_at DateTime @default(now())
+}
+
+model Products {
+  id                 String   @id @default(auto()) @map("_id") @db.ObjectId
+  title              String
+  description        String
+  price              Int
+  discountPercentage Int
+  rating             Int
+  stock              Int
+  brand              String
+  category           String
+  thumbnail          String
+  images             String[]
+}
+
+model Banner {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  title     String
+  image_id     String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
 }

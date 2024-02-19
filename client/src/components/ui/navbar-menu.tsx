@@ -43,11 +43,11 @@ export const MenuItem = ({
               <motion.div
                 transition={transition}
                 layoutId="active" // layoutId ensures smooth animation
-                className="bg-white dark:bg-black backdrop-blur-sm rounded-2xl overflow-hidden shadow-xl -my-1"
+                className="bg-white dark:bg-gray-700 backdrop-blur-sm rounded-2xl overflow-hidden shadow-xl -my-1"
               >
                 <motion.div
                   layout // layout ensures smooth animation
-                  className="w-max h-full p-4"
+                  className="w-max h-full"
                 >
                   {children}
                 </motion.div>
@@ -70,7 +70,7 @@ export const Menu = ({
   return (
     <nav
       onMouseLeave={() => setActive(null)} // resets the state
-      className="relative rounded-full boder border-transparent dark:bg-black dark:border-white/[0.2] bg-white shadow-input flex justify-center space-x-4 px-8 py-6 "
+      className="relative rounded-full boder border-transparent dark:dark:bg-gray-800 dark:border-white/[0.2] bg-white shadow-input flex justify-center space-x-4 px-8 py-6 "
     >
       {children}
     </nav>
@@ -79,29 +79,34 @@ export const Menu = ({
 
 export const ProductItem = ({
   title,
+  price,
   description,
   href,
   src,
 }: {
   title: string;
+  price: number | string;
   description: string;
   href: string;
   src: string;
 }) => {
   return (
-    <Link href={href} className="flex space-x-2">
+    <Link href={href} className="flex space-x-2 hover:bg-black/30 rounded-md">
       <Image
         src={src}
         width={140}
         height={70}
         alt={title}
-        className="flex-shrink-0 rounded-md shadow-2xl"
+        className="flex-shrink-0 size-24 rounded-md shadow-2xl"
       />
-      <div>
-        <h4 className="text-xl font-bold mb-1 text-black dark:text-white">
+      <div className="px-2">
+        <h4 className="text-base font-semibold mb-1 text-black dark:text-white">
           {title}
         </h4>
-        <p className="text-neutral-700 text-sm max-w-[10rem] dark:text-neutral-300">
+        <p className="text-neutral-700 text-sm font-bold max-w-[10rem] dark:text-neutral-300">
+          {price}
+        </p>
+        <p className="text-neutral-700 text-xs max-w-[10rem] dark:text-neutral-300">
           {description}
         </p>
       </div>
@@ -113,7 +118,7 @@ export const HoveredLink = ({ children, ...rest }: any) => {
   return (
     <Link
       {...rest}
-      className="text-neutral-700 dark:text-neutral-200 hover:text-black "
+      className="text-neutral-700 dark:text-neutral-200 hover:bg-gray-500 px-3 py-2 rounded-none hover:text-black "
     >
       {children}
     </Link>
