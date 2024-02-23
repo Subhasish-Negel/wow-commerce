@@ -11,7 +11,8 @@ const app = express();
 const PORT = process.env.PORT || 8000;
 
 // Enable trust for proxy headers
-app.set("trust proxy", true);
+app.set("trust proxy", 1);
+app.get("/ip", (req, res) => res.send(req.ip));
 
 // Middileware
 app.use(express.json());
