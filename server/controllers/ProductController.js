@@ -48,7 +48,7 @@ export class ProductController {
       });
     }
   }
-
+  
   static async index(req, res) {
     try {
       let page = Number(req.query.page) || 1;
@@ -80,7 +80,7 @@ export class ProductController {
       //     delete item.user.picture_id;
       //   }
       // }
-
+      
       return res.json({
         status: 200,
         products: products,

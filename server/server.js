@@ -10,6 +10,9 @@ import logger from "./config/logger.js";
 const app = express();
 const PORT = process.env.PORT || 8000;
 
+// Enable trust for proxy headers
+app.set("trust proxy", true);
+
 // Middileware
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));

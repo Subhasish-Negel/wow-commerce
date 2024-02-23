@@ -1,6 +1,8 @@
+import { BASE_URL } from "@/lib/constant/constant";
+
 export const BannerProducts = async () => {
   try {
-    const response = await fetch("http://localhost:5000/api/banner");
+    const response = await fetch(`${BASE_URL}/banner`);
     const data = await response.json();
     return data.images;
   } catch (error) {
