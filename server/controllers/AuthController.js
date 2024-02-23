@@ -70,6 +70,12 @@ class AuthController {
           const token = Jwt.sign(payloadData, process.env.JWT_SECRET, {
             expiresIn: "1h",
           });
+
+          // Set the token as an HttpOnly cookie
+          res.cookie("jwtoken", token, { httpOnly: true, secure: true });
+
+          res.cookie("test", "lmaawdawdoo", { httpOnly: true, secure: true });
+
           return res.json({
             message: "Logged In",
             access_token: `Bearer ${token}`,

@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { HoveredLink, Menu, MenuItem, ProductItem } from "../ui/navbar-menu";
 import { cn } from "@/lib/utils";
 import { IProduct } from "@/lib/types/products.types";
-import { fetchProducts } from "@/app/api/getRandomProducts";
+import { fetchRandomProducts } from "@/app/api/getRandomProducts";
 export function NavbarDemo() {
   return (
     <div className="relative w-full flex items-center justify-center">
@@ -33,7 +33,7 @@ function Navbar({ className }: { className?: string }) {
 
   useEffect(() => {
     const fetchData = async () => {
-      const productsData = await fetchProducts();
+      const productsData = await fetchRandomProducts();
       setProducts(productsData);
     };
     fetchData();

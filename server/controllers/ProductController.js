@@ -48,23 +48,24 @@ export class ProductController {
       });
     }
   }
-  
+
   static async index(req, res) {
     try {
+      const count = await prisma.products.count();
       let page = Number(req.query.page) || 1;
-      let limit = Number(req.query.limit) || 20;
+      let limit = Number(req.query.limit);
 
       if (page <= 0) {
         page = 1;
       }
 
-      if (limit <= 0 || limit > 20) {
-        limit = 20;
+      if (!limit) {
+        limit = count;
+        page = 1;
       }
 
       const skip = (page - 1) * limit;
-      const totalBlogs = await prisma.products.count();
-      const totalPages = Math.ceil(totalBlogs / limit);
+      const totalPages = Math.ceil(count / limit);
 
       const products = await prisma.products.findMany({
         skip: skip,
@@ -74,20 +75,16 @@ export class ProductController {
       // // Process each object
       // for (const item of products) {
       //   item.image = cloudinary.url(item.image_id);
-      //   delete item.image_id;
-      //   if (item.user.picture_id) {
-      //     item.user.image = cloudinary.url(item.user.picture_id);
-      //     delete item.user.picture_id;
-      //   }
-      // }
-      
+      //   delete item.image_id}
+
       return res.json({
         status: 200,
         products: products,
         metadata: {
+          totalItems: count,
+          currentItem: limit,
           totalPages,
           currentPage: page,
-          currentLimit: limit,
         },
       });
     } catch (error) {

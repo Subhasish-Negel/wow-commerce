@@ -1,10 +1,10 @@
 import { BASE_URL } from "@/lib/constant/constant";
 
-export const fetchRandomProducts = async () => {
+export const fetchProducts = async () => {
   try {
-    const response = await fetch(`${BASE_URL}/product/random`);
+    const response = await fetch(`${BASE_URL}/products`);
     const data = await response.json();
-    return data.products;
+    return data
   } catch (error) {
     console.error("Error fetching products:", error);
     return [];
