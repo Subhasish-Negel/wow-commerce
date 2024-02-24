@@ -82,7 +82,7 @@ export class ProductController {
         products: products,
         metadata: {
           totalItems: count,
-          currentItem: limit,
+          currentItems: products.length,
           totalPages,
           currentPage: page,
         },

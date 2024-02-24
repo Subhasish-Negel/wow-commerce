@@ -7,12 +7,14 @@ import { IProduct } from "@/lib/types/products.types";
 const ProductsPage = () => {
   const [products, setProducts] = useState<IProduct[] | null>();
   const [count, setCount] = useState();
+  const [currentCount, setCurrentCount] = useState();
 
   useEffect(() => {
     const fetchData = async () => {
-      const productsData = await fetchProducts();
+      const productsData = await fetchProducts({ page:3, limit: 10});
       setProducts(productsData.products);
       setCount(productsData.metadata.totalItems);
+      setCurrentCount(productsData.metadata.currentItems);
     };
 
     fetchData();
@@ -20,7 +22,8 @@ const ProductsPage = () => {
   console.log(count);
   return (
     <div>
-      <p className="text-2xl bg-red-700">{count}</p>
+      <p className="text-2xl bg-red-700">Total Item {count}</p>
+      <p className="text-2xl bg-red-700">Current Item {currentCount}</p>
       <div className="flex justify-center items-center my-4">
         <div className="flex flex-col space-y-4"></div>
       </div>
