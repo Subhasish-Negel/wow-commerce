@@ -28,15 +28,15 @@ const ProductsPage = () => {
   const queryParams = new URLSearchParams();
 
   // Add parameters conditionally
-  if (limit) {
-    queryParams.append("limit", limit.toString());
-  }
   if (search) {
     queryParams.append("search", search.toString());
   }
   if (sortField && sortOrder) {
     queryParams.append("sortField", sortField);
     queryParams.append("sortOrder", sortOrder);
+  }
+  if (limit) {
+    queryParams.append("limit", limit.toString());
   }
 
   // Construct the full URL with query parameters
