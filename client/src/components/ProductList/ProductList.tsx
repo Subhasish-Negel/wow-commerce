@@ -1,31 +1,91 @@
 "use client";
 import { useEffect, useState } from "react";
-import { fetchProducts } from "@/app/api/getProducts";
+import { fetchProducts } from "@/lib/api/getProducts";
 import ProductCard from "@/components/ProductCard/ProductCard";
 import { IProduct } from "@/lib/types/products.types";
+import PaginationModule from "@/components/Pagination/Pagination";
+import { useSearchParams } from "next/navigation";
+import { AiOutlineLoading3Quarters } from "react-icons/ai";
+
+interface FetchParams {
+  page?: number;
+  limit?: number;
+  search?: string;
+  sortField?: string; // Optional sort field
+  sortOrder?: "asc" | "desc";
+}
 
 const ProductsPage = () => {
+  const searchParams = useSearchParams();
+  const page = searchParams.get("page");
+  const limit = searchParams.get("limit");
+  const search = searchParams.get("search");
+  const sortField = searchParams.get("sort");
+  const sortOrder = searchParams.get("by");
   const [products, setProducts] = useState<IProduct[] | null>();
-  const [count, setCount] = useState();
-  const [currentCount, setCurrentCount] = useState();
+
+  const [totalPages, setTotalPages] = useState();
+  const queryParams = new URLSearchParams();
+
+  // Add parameters conditionally
+  if (limit) {
+    queryParams.append("limit", limit.toString());
+  }
+  if (search) {
+    queryParams.append("search", search.toString());
+  }
+  if (sortField && sortOrder) {
+    queryParams.append("sortField", sortField);
+    queryParams.append("sortOrder", sortOrder);
+  }
+
+  // Construct the full URL with query parameters
+  const url = {
+    pathname: "/products?",
+    query: queryParams.toString(), // Convert URLSearchParams to a string
+  };
 
   useEffect(() => {
     const fetchData = async () => {
-      const productsData = await fetchProducts({ page:3, limit: 10});
+      let fetchParams: FetchParams = {
+        page: Number(page) || 1,
+        limit: Number(limit) || 8,
+        search: search || "",
+        sortOrder: "desc", // Always set sortOrder
+      };
+
+      // Add sortField parameter if it exists
+      if (sortField && sortOrder) {
+        fetchParams.sortField = sortField;
+      }
+
+      const productsData = await fetchProducts(fetchParams);
       setProducts(productsData.products);
-      setCount(productsData.metadata.totalItems);
-      setCurrentCount(productsData.metadata.currentItems);
+      setTotalPages(productsData.metadata.totalPages);
     };
 
     fetchData();
-  }, []);
-  console.log(count);
+  }, [limit, page, search, setProducts, setTotalPages, sortField, sortOrder]);
+
+  if (!products && !totalPages) {
+    return (
+      <div className="h-screen flex justify-center items-center">
+        <div className="flex text-7xl animate-ping gap-4">
+          <AiOutlineLoading3Quarters className="animate-spin" />
+          <p>Now Loading...</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div>
-      <p className="text-2xl bg-red-700">Total Item {count}</p>
-      <p className="text-2xl bg-red-700">Current Item {currentCount}</p>
-      <div className="flex justify-center items-center my-4">
-        <div className="flex flex-col space-y-4"></div>
+    <div className="mx-20 gap-10">
+      <div className="flex justify-center w-full my-6">
+        <PaginationModule
+          page={Number(page)}
+          total={totalPages || 1}
+          url={`/products?${url.query}`}
+        />
       </div>
       <ul className="flex flex-wrap gap-6 justify-center items-center">
         {products?.map((product) => (
@@ -34,6 +94,13 @@ const ProductsPage = () => {
           </li>
         ))}
       </ul>
+      <div className="flex justify-center w-full my-6">
+        <PaginationModule
+          page={Number(page)}
+          total={totalPages || 1}
+          url={`${url.pathname}${url.query}`}
+        />
+      </div>
     </div>
   );
 };

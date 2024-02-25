@@ -1,6 +1,6 @@
 "use client";
 import Autoplay from "embla-carousel-autoplay";
-import { BannerProducts } from "@/app/api/getBannerProducts";
+import { BannerProducts } from "@/lib/api/getBannerProducts";
 import {
   Carousel,
   CarouselContent,
@@ -25,14 +25,12 @@ export function Banner() {
   return (
     <Carousel
       className="w-4/6"
-      
       plugins={[
         Autoplay({
           delay: 2500,
           stopOnInteraction: false,
           stopOnHover: true,
           stopOnMouseEnter: true,
-          
         }),
       ]}
     >
@@ -52,8 +50,8 @@ export function Banner() {
           </CarouselItem>
         ))}
       </CarouselContent>
-      <CarouselPrevious />
-      <CarouselNext />
+      <CarouselPrevious className="left-8 opacity-85"/>
+      <CarouselNext className="right-8 opacity-85"/>
     </Carousel>
   );
 }

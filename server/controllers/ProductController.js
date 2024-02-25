@@ -95,6 +95,78 @@ export class ProductController {
     }
   }
 
+  static async searchProducts(req, res) {
+    try {
+      let count = await prisma.products.count();
+      let { search, sortField, sortOrder, page, limit } = req.query;
+
+      if (page <= 0) {
+        page = 1;
+      }
+
+      if (!limit) {
+        limit = count;
+        page = 1;
+      }
+
+      // Calculate skip based on page and limit
+      const skip = (Number(page) - 1) * Number(limit);
+
+      // Build query conditions
+      const query = {
+        skip,
+        take: Number(limit),
+      };
+
+      // Add search conditions if search parameter exists
+      if (search) {
+        const filteredCount = await prisma.products.count({
+          where: {
+            OR: [
+              { title: { contains: search, mode: "insensitive" } },
+              { category: { contains: search, mode: "insensitive" } },
+              { description: { contains: search, mode: "insensitive" } },
+            ],
+          },
+        });
+        query.where = {
+          OR: [
+            { title: { contains: search, mode: "insensitive" } },
+            { category: { contains: search, mode: "insensitive" } },
+            { description: { contains: search, mode: "insensitive" } },
+          ],
+        };
+        count = filteredCount;
+      }
+      const totalPages = Math.ceil(count / limit);
+
+      // Add sorting conditions if both sortField and sortOrder parameters exist
+      if (sortField && sortOrder) {
+        query.orderBy = {
+          [sortField]: sortOrder,
+        };
+      }
+
+      // Fetch products based on the combined query
+      const products = await prisma.products.findMany(query);
+      page = Number(page);
+
+      return res.json({
+        status: 200,
+        products: products,
+        metadata: {
+          currentItems: products.length,
+          totalItems: count,
+          currentPage: page,
+          totalPages,
+        },
+      });
+    } catch (error) {
+      console.error("Error fetching products:", error);
+      res.status(500).json({ error: "Internal server error" });
+    }
+  }
+
   static async getBanner(req, res) {
     try {
       const bannerImages = await prisma.banner.findMany({});
