@@ -6,6 +6,7 @@ import { IProduct } from "@/lib/types/products.types";
 import PaginationModule from "@/components/Pagination/Pagination";
 import { useSearchParams } from "next/navigation";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
+import SearchBar from "@/components/SearchBar/Search";
 
 interface FetchParams {
   page?: number;
@@ -49,7 +50,7 @@ const ProductsPage = () => {
     const fetchData = async () => {
       let fetchParams: FetchParams = {
         page: Number(page) || 1,
-        limit: Number(limit) || 8,
+        limit: Number(limit) || 4,
         search: search || "",
         sortOrder: "desc", // Always set sortOrder
       };
@@ -79,13 +80,15 @@ const ProductsPage = () => {
   }
 
   return (
-    <div className="mx-20 gap-10">
+    <div className="gap-10">
+      <SearchBar />
       <div className="flex justify-center w-full my-6">
         <PaginationModule
           page={Number(page)}
           total={totalPages || 1}
           url={`/products?${url.query}`}
         />
+        
       </div>
       <ul className="flex flex-wrap gap-6 justify-center items-center">
         {products?.map((product) => (
