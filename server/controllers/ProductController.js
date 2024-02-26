@@ -48,54 +48,7 @@ export class ProductController {
       });
     }
   }
-
   static async index(req, res) {
-    try {
-      const count = await prisma.products.count();
-      let page = Number(req.query.page) || 1;
-      let limit = Number(req.query.limit);
-
-      if (page <= 0) {
-        page = 1;
-      }
-
-      if (!limit) {
-        limit = count;
-        page = 1;
-      }
-
-      const skip = (page - 1) * limit;
-      const totalPages = Math.ceil(count / limit);
-
-      const products = await prisma.products.findMany({
-        skip: skip,
-        take: limit,
-      });
-
-      // // Process each object
-      // for (const item of products) {
-      //   item.image = cloudinary.url(item.image_id);
-      //   delete item.image_id}
-
-      return res.json({
-        status: 200,
-        products: products,
-        metadata: {
-          totalItems: count,
-          currentItems: products.length,
-          totalPages,
-          currentPage: page,
-        },
-      });
-    } catch (error) {
-      return res.status(500).json({
-        status: 500,
-        error: "Internal server error",
-      });
-    }
-  }
-
-  static async searchProducts(req, res) {
     try {
       let count = await prisma.products.count();
       let { search, sortField, sortOrder, page, limit } = req.query;

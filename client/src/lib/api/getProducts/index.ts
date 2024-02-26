@@ -17,7 +17,7 @@ export const fetchProducts = async ({
   sortOrder,
 }: FetchProductsProps = {}) => {
   try {
-    let url = `${BASE_URL}/search`;
+    let url = `${BASE_URL}/products`;
 
     // Add search parameter to URL if provided
     if (search) {

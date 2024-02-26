@@ -23,7 +23,6 @@ router.put("/profile/update/:id", authMiddlware, ProfileController.update);
 // });
 
 router.get("/products", ProductController.index);
-router.get("/search", ProductController.searchProducts);
 router.get("/product/random", ProductController.getRandomProducts);
 router.get("/banner", ProductController.getBanner);
 router.get("/product/:id", ProductController.show);
