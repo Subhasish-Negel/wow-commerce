@@ -4,10 +4,11 @@ import { HoveredLink, Menu, MenuItem, ProductItem } from "../ui/navbar-menu";
 import { cn } from "@/lib/utils";
 import { IProduct } from "@/lib/types/products.types";
 import { fetchRandomProducts } from "@/lib/api/getRandomProducts";
-export function NavbarDemo() {
+import Link from "next/link";
+export function Navbar() {
   return (
     <div className="relative w-full flex items-center justify-center">
-      <Navbar className="top-2 z-50" />
+      <NavbarTemplate className="top-2 z-50" />
       <span className=" z-10 hidden md:block mt-2 h-[28px] w-full text-center bg-black/90 text-white text-pretty py-1 text-sm">
         FREE SHIPPING OVER <b>₹788/-</b>
       </span>
@@ -15,7 +16,7 @@ export function NavbarDemo() {
   );
 }
 
-function Navbar({ className }: { className?: string }) {
+function NavbarTemplate({ className }: { className?: string }) {
   const [active, setActive] = useState<string | null>(null);
   const [products, setProducts] = useState<IProduct[] | null>(null);
 
@@ -76,6 +77,7 @@ function Navbar({ className }: { className?: string }) {
             <HoveredLink href="/enterprise">Enterprise</HoveredLink>
           </div>
         </MenuItem>
+        <Link href="/products">All Products</Link>
       </Menu>
     </div>
   );

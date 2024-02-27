@@ -49,27 +49,25 @@ const SearchBar = () => {
   };
 
   return (
-    <form className="z-50 relative group w-full sm:w-5/6 md:w-2/3 xl:w-1/2 mx-auto py-6">
-      <div className="">
-        <Input
-          className=""
-          radius="full"
-          size="sm"
-          type="text"
-          placeholder="Search..."
-          value={searchTerm}
-          onChange={(e) => hadleSearch(e)}
-          onFocus={() => setInputFocus(true)}
-          onBlur={() => setInputFocus(false)}
-          endContent={
-            <Link href={`${pathname}?search=${searchTerm}&page=1`}>
-              <button className="bg-black/50 hover:bg-black p-2 rounded-full">
-                <BiSearchAlt className="text-2xl text-default-400 pointer-events-none flex-shrink-0" />
-              </button>
-            </Link>
-          }
-        />
-      </div>
+    <div className="z-50 relative group w-full sm:w-5/6 md:w-2/3 xl:w-1/2 mx-auto py-6">
+      <Input
+        className=""
+        radius="full"
+        size="sm"
+        type="text"
+        placeholder="Search..."
+        value={searchTerm}
+        onChange={(e) => hadleSearch(e)}
+        onFocus={() => setInputFocus(true)}
+        onBlur={() => setInputFocus(false)}
+        endContent={
+          <Link href={`${pathname}?search=${searchTerm}&page=1`}>
+            <button className="bg-black/50 hover:bg-black p-2 rounded-full">
+              <BiSearchAlt className="text-2xl text-default-400 pointer-events-none flex-shrink-0" />
+            </button>
+          </Link>
+        }
+      />
       {searchTerm.length > 0 && (
         <div
           className={`h-fit max-h-[400px] overflow-y-scroll absolute top-20 bg-slate-800 text-white w-full rounded-xl left-1/2 -translate-x-1/2 flex-col ${
@@ -94,7 +92,7 @@ const SearchBar = () => {
           ))}
         </div>
       )}
-    </form>
+    </div>
   );
 };
 
