@@ -1,6 +1,10 @@
-export const BASE_URL = "https://wow-commerce.onrender.com/api/";
+export const BASE_URL = "http://localhost:5000/api/";
 
-export const components: { title: string; href: string; description: string }[] = [
+export const components: {
+  title: string;
+  href: string;
+  description: string;
+}[] = [
   {
     title: "Alert Dialog",
     href: "/docs/primitives/alert-dialog",

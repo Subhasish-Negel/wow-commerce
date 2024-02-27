@@ -13,41 +13,6 @@ import logger from "../config/logger.js";
 import { BannerSchema } from "../validations/BannerSchema.js";
 
 export class ProductController {
-  static async getRandomProducts(req, res) {
-    const numberOfRandomProducts = 4;
-    const minRating = 3;
-
-    try {
-      // Fetch the total number of products
-      const totalProducts = await prisma.products.count();
-
-      // Generate random skip value to get a different set of products each time
-      const randomSkip = Math.floor(
-        Math.random() * (totalProducts - numberOfRandomProducts)
-      );
-
-      // Fetch random products with ratings above 6.5
-      const randomProducts = await prisma.products.findMany({
-        skip: randomSkip,
-        take: numberOfRandomProducts,
-        where: {
-          rating: {
-            gte: minRating,
-          },
-        },
-      });
-
-      return res.json({
-        status: 200,
-        products: randomProducts,
-      });
-    } catch (error) {
-      return res.status(500).json({
-        status: 500,
-        error: "Internal server error",
-      });
-    }
-  }
   static async index(req, res) {
     try {
       let count = await prisma.products.count();
@@ -117,6 +82,66 @@ export class ProductController {
     } catch (error) {
       console.error("Error fetching products:", error);
       res.status(500).json({ error: "Internal server error" });
+    }
+  }
+
+  static async getSearchProducts(req, res) {
+    try {
+      const itemsForSearch = await prisma.products.findMany({
+        select: {
+          id: true,
+          title: true,
+          thumbnail: true,
+          category: true,
+          description: true,
+        },
+      });
+
+      return res.json({
+        status: 200,
+        products: itemsForSearch,
+      });
+    } catch (error) {
+      return res.status(500).json({
+        status: 500,
+        error: "Internal server error",
+      });
+    }
+  }
+
+  static async getRandomProducts(req, res) {
+    const numberOfRandomProducts = 4;
+    const minRating = 3;
+
+    try {
+      // Fetch the total number of products
+      const totalProducts = await prisma.products.count();
+
+      // Generate random skip value to get a different set of products each time
+      const randomSkip = Math.floor(
+        Math.random() * (totalProducts - numberOfRandomProducts)
+      );
+
+      // Fetch random products with ratings above 6.5
+      const randomProducts = await prisma.products.findMany({
+        skip: randomSkip,
+        take: numberOfRandomProducts,
+        where: {
+          rating: {
+            gte: minRating,
+          },
+        },
+      });
+
+      return res.json({
+        status: 200,
+        products: randomProducts,
+      });
+    } catch (error) {
+      return res.status(500).json({
+        status: 500,
+        error: "Internal server error",
+      });
     }
   }
 
