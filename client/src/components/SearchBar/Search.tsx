@@ -29,6 +29,12 @@ const SearchBar = () => {
     fetchData();
   }, [setProducts]);
 
+  const handleOnBlur = () => {
+    setTimeout(() => {
+      setInputFocus(false);
+    }, 150);
+  };
+
   const hadleSearch = (e: ChangeEvent<HTMLInputElement>) => {
     const search = e.target.value.toLowerCase();
     setSearchTerm(search);
@@ -51,7 +57,6 @@ const SearchBar = () => {
   return (
     <div className="z-50 relative group w-full sm:w-5/6 md:w-2/3 xl:w-1/2 mx-auto py-6">
       <Input
-        className=""
         radius="full"
         size="sm"
         type="text"
@@ -59,10 +64,10 @@ const SearchBar = () => {
         value={searchTerm}
         onChange={(e) => hadleSearch(e)}
         onFocus={() => setInputFocus(true)}
-        onBlur={() => setInputFocus(false)}
+        onBlur={handleOnBlur}
         endContent={
           <Link href={`${pathname}?search=${searchTerm}&page=1`}>
-            <button className="bg-black/50 hover:bg-black p-2 rounded-full">
+            <button className="bg-black/40 hover:bg-black p-2 rounded-full">
               <BiSearchAlt className="text-2xl text-default-400 pointer-events-none flex-shrink-0" />
             </button>
           </Link>
@@ -70,20 +75,20 @@ const SearchBar = () => {
       />
       {searchTerm.length > 0 && (
         <div
-          className={`h-fit max-h-[400px] overflow-y-scroll absolute top-20 bg-slate-800 text-white w-full rounded-xl left-1/2 -translate-x-1/2 flex-col ${
+          className={`h-fit max-h-[350px] overflow-y-scroll absolute top-20 bg-[#161618] text-white w-full rounded-xl left-1/2 -translate-x-1/2 flex-col ${
             !isInputFocused || activeSearch.length === 0 ? "hidden" : "flex"
           }`}
         >
           {activeSearch.map((suggestion) => (
             <Link
-              className="hover:bg-slate-600 p-2 text-lg font-semibold rounded-2xl flex"
+              className="hover:bg-slate-700 p-2 text-lg font-semibold rounded-2xl flex"
               key={suggestion.id}
               href={`/products/${suggestion.id}`}
             >
               <Image
                 className="size-14 mx-2 rounded-md"
                 src={suggestion.thumbnail}
-                alt=""
+                alt={suggestion.title}
                 height={80}
                 width={80}
               />

@@ -6,7 +6,7 @@ interface FetchProductsProps {
   limit?: number;
   search?: string; // Add search parameter
   sortField?: string; // Add sortField parameter
-  sortOrder?: "asc" | "desc"; // Add sortOrder parameter
+  sortOrder?: string; // Add sortOrder parameter
 }
 
 export const fetchProducts = async ({
@@ -21,7 +21,7 @@ export const fetchProducts = async ({
 
     // Add search parameter to URL if provided
     if (search) {
-      url += `?search=${(search)}`;
+      url += `?search=${search}`;
     }
 
     // Add pagination parameters to URL if provided

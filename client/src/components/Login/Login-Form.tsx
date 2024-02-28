@@ -58,15 +58,15 @@ export function LoginForm() {
     try {
       const data = await fetcher(`${BASE_URL}/auth/login`, values);
       toast.success(data.message);
-      setTimeout(() => {
-        router.push("/");
-      }, 2000);
+      // setTimeout(() => {
+      //   router.push("/");
+      // }, 2000);
     } catch (error: any) {
       if (error.status === 401) {
         toast.error(error.info.error.message);
       } else {
         toast.error("Server is Broken. Please Try Again");
-      }
+      } 
     }
   }
   return (

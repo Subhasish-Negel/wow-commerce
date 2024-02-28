@@ -13,7 +13,7 @@ export default function PaginationModule({
   url,
 }: PaginationProps) {
   const router = useRouter();
-
+  console.log(url);
   return (
     <Pagination
       initialPage={1}

@@ -3,7 +3,7 @@ import { Suspense } from "react";
 
 const page = () => {
   return (
-    <Suspense>
+    <Suspense fallback={null}>
       <ProductsPage />
     </Suspense>
   );

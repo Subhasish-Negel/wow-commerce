@@ -72,14 +72,17 @@ class AuthController {
           });
 
           // Set the token as an HttpOnly cookie
-          res.cookie("jwtoken", token, { httpOnly: true, secure: true });
 
-          res.cookie("test", "lmaawdawdoo", { httpOnly: true, secure: true });
-
-          return res.json({
-            message: "Logged In",
-            access_token: `Bearer ${token}`,
-          });
+          return res
+            .status(200)
+            .cookie("jwtoken", `Bearer ${token}`, {
+              httpOnly: true,
+              expires: new Date(Date.now() + 1000 * 3600),
+            })
+            .json({
+              message: "Logged In",
+              access_token: `Bearer ${token}`,
+            });
         }
 
         return res.status(401).json({
@@ -101,6 +104,7 @@ class AuthController {
           status: 500,
           message:
             "Something Went REALLY Bad With The Server :( Please Try Later ?",
+          error: error,
         });
       }
     }

@@ -122,7 +122,7 @@ export class ProductController {
         Math.random() * (totalProducts - numberOfRandomProducts)
       );
 
-      // Fetch random products with ratings above 6.5
+      // Fetch random products with ratings above 3
       const randomProducts = await prisma.products.findMany({
         skip: randomSkip,
         take: numberOfRandomProducts,

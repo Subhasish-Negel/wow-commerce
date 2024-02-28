@@ -15,11 +15,11 @@ const PORT = process.env.PORT || 8000;
 // app.get("/ip", (req, res) => res.send(req.ip));
 
 // Middileware
+app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static("public/images"));
 app.use(fileUpload());
-app.use(cookieParser());
 app.use(helmet());
 app.use(cors());
 app.use(limiter);
