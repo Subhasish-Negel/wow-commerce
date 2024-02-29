@@ -1,4 +1,5 @@
 // Assuming you have a BASE_URL defined elsewhere
+import { TokenValidator } from "@/lib/Token-Validator";
 import { BASE_URL } from "@/lib/constant/constant";
 
 interface FetchProductsProps {
@@ -39,11 +40,30 @@ export const fetchProducts = async ({
       }sortField=${sortField}&sortOrder=${sortOrder}`;
     }
 
-    const response = await fetch(url);
+    const token = TokenValidator();
+
+    const response = await fetch(url, {
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: token,
+      },
+    });
+
+    if (!response.ok) {
+      const error: any = new Error(
+        "An error occurred while registering the user"
+      );
+
+      // Attach extra info to the error object.
+      error.info = await response.json();
+      error.status = response.status;
+      throw error;
+    }
+
     const data = await response.json();
     return data;
   } catch (error) {
-    console.error("Error fetching products:", error);
-    return [];
+    return error;
   }
 };

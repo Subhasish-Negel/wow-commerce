@@ -21,7 +21,12 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.static("public/images"));
 app.use(fileUpload());
 app.use(helmet());
-app.use(cors());
+app.use(
+  cors({
+    origin: "http://localhost:3030",
+    credentials: true,
+  })
+);
 app.use(limiter);
 
 app.get("/", (req, res) => {

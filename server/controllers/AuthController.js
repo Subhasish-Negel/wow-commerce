@@ -76,7 +76,8 @@ class AuthController {
           return res
             .status(200)
             .cookie("jwtoken", `Bearer ${token}`, {
-              httpOnly: true,
+              // httpOnly: true,
+              // secure: true,
               expires: new Date(Date.now() + 1000 * 3600),
             })
             .json({

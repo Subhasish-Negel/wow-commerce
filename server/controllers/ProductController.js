@@ -69,16 +69,19 @@ export class ProductController {
       const products = await prisma.products.findMany(query);
       page = Number(page);
 
-      return res.json({
-        status: 200,
-        products: products,
-        metadata: {
-          currentItems: products.length,
-          totalItems: count,
-          currentPage: page,
-          totalPages,
-        },
-      });
+      return res
+        .status(200)
+        .cookie("page", page)
+        .json({
+          status: 200,
+          products: products,
+          metadata: {
+            currentItems: products.length,
+            totalItems: count,
+            currentPage: page,
+            totalPages,
+          },
+        });
     } catch (error) {
       console.error("Error fetching products:", error);
       res.status(500).json({ error: "Internal server error" });

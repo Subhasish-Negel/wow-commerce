@@ -5,6 +5,7 @@ import { cn } from "@/lib/utils";
 import { IProduct } from "@/lib/types/products.types";
 import { fetchRandomProducts } from "@/lib/api/getRandomProducts";
 import Link from "next/link";
+import ProfileDropdown from "@/components/Navbar/Profile-Dropdown";
 export function Navbar() {
   return (
     <div className="relative w-full flex items-center justify-center">
@@ -78,6 +79,7 @@ function NavbarTemplate({ className }: { className?: string }) {
           </div>
         </MenuItem>
         <Link href="/products">All Products</Link>
+        <ProfileDropdown />
       </Menu>
     </div>
   );

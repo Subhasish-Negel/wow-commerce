@@ -4,7 +4,7 @@ import { fetchProducts } from "@/lib/api/getProducts";
 import ProductCard from "@/components/ProductCard/ProductCard";
 import { IProduct } from "@/lib/types/products.types";
 import PaginationModule from "@/components/Pagination/Pagination";
-import { useRouter, usePathname, useSearchParams } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import SearchBar from "@/components/SearchBar/Search";
 import SortingComponent from "@/components/Products-Sorting/Sorting";
@@ -28,7 +28,6 @@ const ProductsPage = () => {
   const sortField = searchParams.get("sort");
   const sortOrder = searchParams.get("by");
   const queryParams = new URLSearchParams();
-
 
   // Add parameters conditionally
   if (search) {
@@ -66,6 +65,8 @@ const ProductsPage = () => {
       setProducts(productsData.products);
       setTotalPages(productsData.metadata.totalPages);
     };
+
+    
 
     fetchData();
   }, [limit, page, search, setProducts, setTotalPages, sortField, sortOrder]);
