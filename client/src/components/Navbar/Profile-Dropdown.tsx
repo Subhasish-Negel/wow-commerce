@@ -37,7 +37,7 @@ export default function ProfileDropdown() {
           className="text-danger"
           color="danger"
         >
-          Delete file
+          Logout
         </DropdownItem>
       </DropdownMenu>
     </Dropdown>

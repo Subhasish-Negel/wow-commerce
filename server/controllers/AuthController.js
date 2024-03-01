@@ -110,6 +110,23 @@ class AuthController {
       }
     }
   }
+
+  static async logout(req, res) {
+    try {
+      // Clear the authentication cookie and send a response indicating successful logout
+      return res
+        .status(200)
+        .clearCookie("jwtoken")
+        .json({ message: "Logout successful" });
+    } catch (error) {
+      // Handle any errors
+      return res.status(500).json({
+        status: 500,
+        message: "Something went wrong with the server",
+        error: error,
+      });
+    }
+  }
 }
 
 export default AuthController;

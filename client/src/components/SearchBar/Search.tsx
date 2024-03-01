@@ -9,6 +9,7 @@ import Image from "next/image";
 interface Suggestion {
   id: number;
   title: string;
+  brand: string;
   thumbnail: string;
   category: string;
   description: string;
@@ -47,6 +48,7 @@ const SearchBar = () => {
     const filteredProducts = products.filter(
       (product) =>
         product.title.toLowerCase().includes(search) ||
+        product.brand.toLowerCase().includes(search) ||
         product.description.toLowerCase().includes(search) ||
         product.category.toLowerCase().includes(search)
     );

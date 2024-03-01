@@ -94,6 +94,7 @@ export class ProductController {
         select: {
           id: true,
           title: true,
+          brand: true,
           thumbnail: true,
           category: true,
           description: true,
