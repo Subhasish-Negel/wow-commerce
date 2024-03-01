@@ -66,7 +66,6 @@ const ProductsPage = () => {
       setTotalPages(productsData.metadata.totalPages);
     };
 
-    
 
     fetchData();
   }, [limit, page, search, setProducts, setTotalPages, sortField, sortOrder]);

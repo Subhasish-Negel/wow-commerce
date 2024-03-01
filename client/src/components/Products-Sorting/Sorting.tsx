@@ -3,15 +3,11 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 type SortField = "price" | "rating" | "discountPercentage";
 type SortOrder = "asc" | "desc";
 
-interface SortingProps {
-  url: string;
-}
-
 const SortingComponent = () => {
-  const router = useRouter();
+  // const router = useRouter();
   const searchParams = useSearchParams();
   const pathName = usePathname();
-  const page = searchParams.get("page");
+  // const page = searchParams.get("page");
   const limit = searchParams.get("limit");
   const search = searchParams.get("search");
   const queryParams = new URLSearchParams();
@@ -25,9 +21,9 @@ const SortingComponent = () => {
     queryParams.append("limit", limit.toString());
   }
 
-  if (page) {
-    queryParams.append("page", page.toString());
-  }
+  // if (page) {
+  //   queryParams.append("page", page.toString());
+  // }
 
   // Construct the full URL with query parameters
 
@@ -48,8 +44,8 @@ const SortingComponent = () => {
     // const url = new URL(window.location.href);
     // url.searchParams.set("sort", field);
     // url.searchParams.set("by", order);
-    router.push(`${url.pathname}${url.query}`);
-    // window.location.href = url.toString();
+    // router.push(`${url.pathname}${url.query}`);
+    window.location.href = `${url.pathname}${url.query}`;
   };
 
   return (
