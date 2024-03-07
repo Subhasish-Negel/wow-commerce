@@ -6,18 +6,21 @@ import { IProduct } from "@/lib/types/products.types";
 import PaginationModule from "@/components/Pagination/Pagination";
 import { usePathname, useSearchParams } from "next/navigation";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
-import SearchBar from "@/components/SearchBar/Search";
-import SortingComponent from "@/components/Products-Sorting/Sorting";
 
 interface FetchParams {
   page?: number;
   limit?: number;
   search?: string;
-  sortField?: string; // Optional sort field
-  sortOrder?: string; // Optional sort order
+  sortField?: string;
+  sortOrder?: string;
 }
 
-const ProductsPage = () => {
+interface IProps {
+  items: number;
+  pagination?: boolean;
+}
+
+const ProductsPage = ({ items, pagination }: IProps) => {
   const [products, setProducts] = useState<IProduct[] | null>();
   const [totalPages, setTotalPages] = useState();
   const searchParams = useSearchParams();
@@ -51,7 +54,7 @@ const ProductsPage = () => {
     const fetchData = async () => {
       let fetchParams: FetchParams = {
         page: Number(page) || 1,
-        limit: Number(limit) || 4,
+        limit: Number(limit) || items,
         search: search || "",
         sortOrder: sortOrder || "desc", // Always set sortOrder
       };
@@ -66,9 +69,17 @@ const ProductsPage = () => {
       setTotalPages(productsData.metadata.totalPages);
     };
 
-
     fetchData();
-  }, [limit, page, search, setProducts, setTotalPages, sortField, sortOrder]);
+  }, [
+    items,
+    limit,
+    page,
+    search,
+    setProducts,
+    setTotalPages,
+    sortField,
+    sortOrder,
+  ]);
 
   if (!products && !totalPages) {
     return (
@@ -84,18 +95,14 @@ const ProductsPage = () => {
     );
   }
 
-  console.log(url);
-
   return (
     <div className="gap-10">
-      <SearchBar />
-      <SortingComponent />
       <div className="flex justify-center w-full my-6">
-        <PaginationModule
+        {/* <PaginationModule
           page={Number(page)}
           total={totalPages || 1}
           url={`${url.pathname}${url.query}`}
-        />
+        /> */}
       </div>
       <ul className="flex flex-wrap gap-6 justify-center items-center">
         {products?.map((product) => (
@@ -105,13 +112,15 @@ const ProductsPage = () => {
         ))}
       </ul>
 
-      <div className="flex justify-center w-full my-6">
-        <PaginationModule
-          page={Number(page)}
-          total={totalPages || 1}
-          url={`${url.pathname}${url.query}`}
-        />
-      </div>
+      {pagination && (
+        <div className="flex justify-center w-full my-6">
+          <PaginationModule
+            page={Number(page)}
+            total={totalPages || 1}
+            url={`${url.pathname}${url.query}`}
+          />
+        </div>
+      )}
     </div>
   );
 };

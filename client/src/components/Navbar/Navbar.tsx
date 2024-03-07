@@ -6,13 +6,33 @@ import { IProduct } from "@/lib/types/products.types";
 import { fetchRandomProducts } from "@/lib/api/getRandomProducts";
 import Link from "next/link";
 import ProfileDropdown from "@/components/Navbar/Profile-Dropdown";
+import toast, { Toaster, useToasterStore } from "react-hot-toast";
+
 export function Navbar() {
+  const { toasts } = useToasterStore();
+  const TOAST_LIMIT = 4;
+
+  useEffect(() => {
+    toasts
+      .filter((t) => t.visible) // Only consider visible toasts
+      .filter((_, i) => i >= TOAST_LIMIT) // Is toast index over limit?
+      .forEach((t) => toast.dismiss(t.id)); // Dismiss – Use toast.remove(t.id) for no exit animation
+  }, [toasts]);
+
   return (
     <div className="relative w-full flex items-center justify-center">
       <NavbarTemplate className="top-2 z-50" />
       <span className=" z-10 hidden md:block mt-2 h-[28px] w-full text-center bg-black/90 text-white text-pretty py-1 text-sm">
         FREE SHIPPING OVER <b>₹788/-</b>
       </span>
+      <Toaster
+        position="bottom-right"
+        reverseOrder={false}
+        gutter={20}
+        toastOptions={{
+          duration: 2000,
+        }}
+      />
     </div>
   );
 }

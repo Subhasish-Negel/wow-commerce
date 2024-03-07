@@ -16,22 +16,23 @@ model Users {
   picture_id String?
   created_at DateTime @default(now())
   updated_at DateTime @default(now())
-  blogs      Blogs[]
+  // blogs      Blogs[]
+  Cart       Cart[]
 }
 
-model Blogs {
-  id         String   @id @default(auto()) @map("_id") @db.ObjectId
-  user_id    String   @db.ObjectId
-  user       Users    @relation(fields: [user_id], references: [id])
-  title      String
-  content    String
-  image_id   String
-  created_at DateTime @default(now())
-  updated_at DateTime @default(now())
-}
+// model Blogs {
+//   id         String   @id @default(auto()) @map("_id") @db.ObjectId
+//   user_id    String   @db.ObjectId
+//   user       Users    @relation(fields: [user_id], references: [id])
+//   title      String
+//   content    String
+//   image_id   String
+//   created_at DateTime @default(now())
+//   updated_at DateTime @default(now())
+// }
 
 model Products {
-  id                 String   @id @default(auto()) @map("_id") @db.ObjectId
+  id                 String     @id @default(auto()) @map("_id") @db.ObjectId
   title              String
   description        String
   price              Int
@@ -42,12 +43,31 @@ model Products {
   category           String
   thumbnail          String
   images             String[]
+  CartItem           CartItem[]
 }
 
 model Banner {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
   title     String
-  image_id     String
+  image_id  String
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
+}
+
+model Cart {
+  id         String     @id @default(auto()) @map("_id") @db.ObjectId
+  user_id    String     @db.ObjectId
+  user       Users      @relation(fields: [user_id], references: [id])
+  created_at DateTime   @default(now())
+  cartItems  CartItem[] // One-to-many relationship: A cart can have multiple cart items
+}
+
+model CartItem {
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  cart_id    String   @db.ObjectId
+  cart       Cart     @relation(fields: [cart_id], references: [id])
+  product_id String   @db.ObjectId
+  product    Products @relation(fields: [product_id], references: [id])
+  quantity   Int
+  price      Int
 }

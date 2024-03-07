@@ -1,3 +1,4 @@
+import { BASE_URL } from "@/lib/constant/constant";
 import {
   Dropdown,
   DropdownTrigger,
@@ -5,19 +6,38 @@ import {
   DropdownItem,
   Button,
 } from "@nextui-org/react";
+import toast from "react-hot-toast";
+
+const logoutUser = async () => {
+  try {
+    // Send a POST request to the logout endpoint
+    const response = await fetch(`${BASE_URL}/auth/logout`, {
+      method: "POST",
+      credentials: "include", // Include cookies
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (response.ok) {
+      toast.success("Logout successful");
+      setTimeout(() => {
+        window.location.href = "/";
+      }, 1000);
+    } else {
+      toast.error("Logout failed");
+    }
+  } catch (error: any) {
+    // Handle network or other errors
+
+    console.error("Logout failed:", error.message);
+  }
+};
 
 export default function ProfileDropdown() {
-  function deleteCookie(name: any) {
-    document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
-  }
-  // Function to handle logout
-  function handleLogout() {
-    // Remove the 'jwtoken' cookie
-    deleteCookie("jwtoken");
-
-    // Redirect the user to the logout page or perform any other necessary actions
-    window.location.href = "/"; // Redirect to the logout page
-  }
+  const handleLogout = async () => {
+    await logoutUser();
+  };
 
   return (
     <Dropdown>

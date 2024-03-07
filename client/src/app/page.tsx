@@ -1,11 +1,18 @@
 import { Navbar } from "@/components/Navbar/Navbar";
+import ProductsPage from "@/components/ProductList/ProductList";
 import { Banner } from "@/components/banner/Carousel";
+import { Suspense } from "react";
 
 export default function Home() {
   return (
-    <div className="h-screen flex flex-col items-center justify-center">
+    <div className="pt-24">
       <Navbar />
-      <Banner />
+      <div className="flex flex-col items-center px-10 sm:px-20">
+        <Banner />
+        <Suspense fallback={null}>
+          <ProductsPage items={8} />
+        </Suspense>
+      </div>
     </div>
   );
 }

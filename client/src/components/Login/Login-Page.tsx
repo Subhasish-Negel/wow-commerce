@@ -7,7 +7,6 @@ import toast, { Toaster, useToasterStore } from "react-hot-toast";
 
 export default function Login() {
   const { toasts } = useToasterStore();
-
   const TOAST_LIMIT = 4;
 
   useEffect(() => {
