@@ -1,5 +1,5 @@
 "use client";
-import { usePathname, useRouter } from "next/navigation"; // Import useSearchParams
+import { usePathname } from "next/navigation"; // Import useSearchParams
 import { ChangeEvent, useEffect, useState } from "react";
 import { Input } from "@nextui-org/react";
 import { BiSearchAlt } from "react-icons/bi";

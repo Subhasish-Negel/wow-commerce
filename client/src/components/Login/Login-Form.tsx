@@ -59,7 +59,7 @@ export function LoginForm() {
       const data = await fetcher(`${BASE_URL}/auth/login`, values);
       toast.success(data.message);
       setTimeout(() => {
-        router.push("/");
+        window.location.href = "/";
       }, 2000);
     } catch (error: any) {
       if (error.status === 401) {
@@ -69,6 +69,7 @@ export function LoginForm() {
       }
     }
   }
+
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2">

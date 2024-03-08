@@ -11,6 +11,7 @@ class ProfileController {
         where: { id: userData.id },
         select: {
           id: true,
+          role: true,
           name: true,
           email: true,
           picture_id: true,
@@ -21,7 +22,7 @@ class ProfileController {
       if (user.picture_id) {
         user.image = cloudinary.url(user.picture_id);
       }
-      delete user.picture_id;
+      
 
       res.status(200).json({ user });
     } catch (error) {

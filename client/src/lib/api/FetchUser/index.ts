@@ -1,34 +1,27 @@
+import { TokenValidator } from "@/lib/Token-Validator";
 import { BASE_URL } from "@/lib/constant/constant";
+
+const token = TokenValidator();
 
 // Fetch user data based on the provided syntax (GET request)
 export const fetchUserData = async () => {
   try {
     const response: any = await fetch(`${BASE_URL}/profile`, {
-      method: "GET", // Change to GET
-      credentials: "include", // Include cookies
+      method: "GET",
+      credentials: "include",
       headers: {
         "Content-Type": "application/json",
+        Authorization: token,
       },
     });
 
-    if (response.ok) {
-      // Handle successful logout (e.g., redirect to login page)
-      window.location.href = "/"; // Redirect to the login page
-    } else {
-      // Handle unsuccessful logout
-      console.error("Logout failed");
-    }
-
-    // Assuming the response contains user data
     const data = await response.json();
-    return data; // Save the data in a variable or handle it as needed
+    return data.user;
   } catch (error: any) {
     console.error("Error fetching user data:", error);
-    // Handle other errors if needed
-    return null; // Return null or an appropriate default value
+    return {};
   }
 };
-
 
 // Check if a cookie exists by name
 export function checkCookieExists(cookieName: string) {
@@ -36,8 +29,8 @@ export function checkCookieExists(cookieName: string) {
   for (const cookie of cookies) {
     const [name] = cookie.split("=");
     if (name === cookieName) {
-      return true; // Cookie exists
+      return true;
     }
   }
-  return false; // Cookie does not exist
+  return false;
 }
