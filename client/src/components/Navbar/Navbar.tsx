@@ -7,6 +7,7 @@ import { fetchRandomProducts } from "@/lib/api/getRandomProducts";
 import Link from "next/link";
 import ProfileDropdown from "@/components/Navbar/Profile-Dropdown";
 import toast, { Toaster, useToasterStore } from "react-hot-toast";
+import ProfileDropdownShadcn from "@/components/Navbar/Profile-Dropdown-Shadcn";
 
 export function Navbar() {
   const { toasts } = useToasterStore();
@@ -99,7 +100,8 @@ function NavbarTemplate({ className }: { className?: string }) {
           </div>
         </MenuItem>
         <Link href="/products">All Products</Link>
-        <ProfileDropdown />
+        <ProfileDropdownShadcn />
+        {/* <ProfileDropdown /> */}
       </Menu>
     </div>
   );
