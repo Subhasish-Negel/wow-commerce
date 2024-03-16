@@ -1,5 +1,4 @@
 // Assuming you have a BASE_URL defined elsewhere
-import { TokenValidator } from "@/lib/Token-Validator";
 import { BASE_URL } from "@/lib/constant/constant";
 
 interface FetchProductsProps {
@@ -40,13 +39,12 @@ export const fetchProducts = async ({
       }sortField=${sortField}&sortOrder=${sortOrder}`;
     }
 
-    const token = TokenValidator();
+
 
     const response = await fetch(url, {
       credentials: "include",
       headers: {
         "Content-Type": "application/json",
-        Authorization: token,
       },
     });
 

@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import toast, { Toaster, useToasterStore } from "react-hot-toast";
 import { authStore } from "@/lib/Zustand/store";
 import { checkCookieExists, fetchUserData } from "@/lib/api/FetchUser";
@@ -28,11 +28,10 @@ export function NextNav() {
   const { toasts } = useToasterStore();
   const TOAST_LIMIT = 4;
   const { userData, setUserData } = authStore();
+  const objectLength = userData ? Object.keys(userData).length : 0;
 
   useEffect(() => {
     const fetchUser = async () => {
-      const objectLength = Object.keys(userData).length;
-
       if (objectLength < 1) {
         if (checkCookieExists("jwtoken")) {
           const user = await fetchUserData();
@@ -46,9 +45,8 @@ export function NextNav() {
       .filter((t) => t.visible) // Only consider visible toasts
       .filter((_, i) => i >= TOAST_LIMIT) // Is toast index over limit?
       .forEach((t) => toast.dismiss(t.id)); // Dismiss – Use toast.remove(t.id) for no exit animation
-  }, [setUserData, toasts, userData]);
+  }, [objectLength, setUserData, toasts, userData]);
 
-  console.log(userData);
 
   return (
     <div className="relative w-full flex flex-col items-center justify-center">
@@ -78,17 +76,16 @@ export default function NextNavComponent() {
     "My Settings",
     "Team Settings",
     "Help & Feedback",
-    "Log Out",
   ];
-  const token = checkCookieExists("jwtoken");
   const { userData } = authStore();
-  const objectLength = Object.keys(userData).length;
+  const objectLength = userData ? Object.keys(userData).length : 0;
+
   const handleLogout = async () => {
     await logoutUser();
   };
 
   return (
-    <Navbar disableAnimation isBordered>
+    <Navbar>
       <NavbarContent className="sm:hidden" justify="start">
         <NavbarMenuToggle />
       </NavbarContent>
@@ -173,7 +170,7 @@ export default function NextNavComponent() {
             <DropdownItem key="system">System</DropdownItem>
             <DropdownItem key="configurations">Configurations</DropdownItem>
             <DropdownItem key="help_and_feedback">Help & Feedback</DropdownItem>
-            {token ? (
+            {objectLength > 1 ? (
               <DropdownItem onClick={handleLogout} key="logout" color="danger">
                 Log Out
               </DropdownItem>
@@ -194,13 +191,7 @@ export default function NextNavComponent() {
           <NavbarMenuItem key={`${item}-${index}`}>
             <Link
               className="w-full"
-              color={
-                index === 2
-                  ? "warning"
-                  : index === menuItems.length - 1
-                  ? "danger"
-                  : "foreground"
-              }
+              color={index === 2 ? "warning" : "foreground"}
               href="#"
               size="lg"
             >
@@ -208,6 +199,19 @@ export default function NextNavComponent() {
             </Link>
           </NavbarMenuItem>
         ))}
+        {objectLength > 1 ? (
+          <NavbarMenuItem key="logout" className="cursor-pointer">
+            <Link onClick={handleLogout} color="danger">
+              Log Out
+            </Link>
+          </NavbarMenuItem>
+        ) : (
+          <NavbarMenuItem key="login">
+            <Link href="/login" color="success">
+              Login
+            </Link>
+          </NavbarMenuItem>
+        )}
       </NavbarMenu>
     </Navbar>
   );

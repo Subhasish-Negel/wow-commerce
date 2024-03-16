@@ -1,6 +1,6 @@
 export const BASE_URL = "http://localhost:5000/api";
 
-export const components: {
+const components: {
   title: string;
   href: string;
   description: string;

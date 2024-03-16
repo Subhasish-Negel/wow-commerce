@@ -4,7 +4,7 @@ import { BASE_URL } from "@/lib/constant/constant";
 
 export const SearchList = async () => {
   try {
-    const response = await fetch(`${BASE_URL}products/searchlist`);
+    const response = await fetch(`${BASE_URL}/products/searchlist`);
     const data = await response.json();
     return data.products;
   } catch (error) {
