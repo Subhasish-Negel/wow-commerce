@@ -18,11 +18,6 @@ router.put("/profile/update/:id", authMiddlware, ProfileController.update);
 
 // Product API
 
-// router.get("/testing", (req, res) => {
-//   res.cookie("test", "lmaoo", { httpOnly: true, secure: true });
-//   res.send(`Yoooo, testing successfully`);
-// });
-
 router.get("/products", ProductController.index);
 router.get("/product/random", ProductController.getRandomProducts);
 router.get("/products/searchlist", ProductController.getSearchProducts);
