@@ -17,13 +17,12 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { BASE_URL } from "@/lib/constant/constant";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useState } from "react";
 
 export function LoginForm() {
   const [passType, setPassType] = useState("password");
-  const router = useRouter();
+
   const form = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
   });
