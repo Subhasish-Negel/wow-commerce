@@ -24,7 +24,8 @@ app.use(helmet());
 app.use(
   cors({
     // origin: "http://localhost:3030",
-    origin: "https://wow-commerce.vercel.app",
+    // origin: "https://wow-commerce.vercel.app",
+    origin: "*",
     credentials: true,
   })
 );
