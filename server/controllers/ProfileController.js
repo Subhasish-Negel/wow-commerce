@@ -21,6 +21,7 @@ class ProfileController {
       // Include imageUrl in the response
       if (user.picture_id) {
         user.image = cloudinary.url(user.picture_id);
+        delete user.picture_id;
       }
 
       res.status(200).json({ user });

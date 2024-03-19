@@ -17,7 +17,6 @@ router.get("/profile", authMiddlware, ProfileController.index);
 router.put("/profile/update/:id", authMiddlware, ProfileController.update);
 
 // Product API
-
 router.get("/products", ProductController.index);
 router.get("/product/random", ProductController.getRandomProducts);
 router.get("/products/searchlist", ProductController.getSearchProducts);

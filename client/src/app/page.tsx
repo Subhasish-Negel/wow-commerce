@@ -7,7 +7,6 @@ import { Suspense } from "react";
 export default function Home() {
   return (
     <>
-      <FetchUserProvider>
         <Nav offer />
         <div className="flex flex-col items-center px-10 sm:px-20">
           <Banner />
@@ -15,7 +14,6 @@ export default function Home() {
             <ProductsPage items={8} />
           </Suspense>
         </div>
-      </FetchUserProvider>
     </>
   );
 }
