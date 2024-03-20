@@ -15,6 +15,9 @@ router.post("/auth/logout", AuthController.logout);
 // Profile Operations
 router.get("/profile", authMiddlware, ProfileController.index);
 router.put("/profile/update/:id", authMiddlware, ProfileController.update);
+router.get("/checkauth", authMiddlware, (req, res) => {
+  res.status(200).json({ message: "User is authenticated" });
+});
 
 // Product API
 router.get("/products", ProductController.index);

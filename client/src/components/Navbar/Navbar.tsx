@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import toast, { Toaster, useToasterStore } from "react-hot-toast";
 import { authStore } from "@/lib/Zustand/store";
 import { useRouter } from "next/navigation";

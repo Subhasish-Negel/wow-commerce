@@ -48,9 +48,9 @@ export function LoginForm() {
         // Attach extra info to the error object.
         error.info = await response.json();
         error.status = response.status;
+        error.message = "An error occurred while registering the user";
         throw error;
       }
-
       return response.json();
     };
 
