@@ -3,7 +3,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { signupSchema } from "@/lib/schemas/signupSchema";
-import z from "zod";
+import z, { set } from "zod";
 import toast from "react-hot-toast";
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
 import {
@@ -20,15 +20,18 @@ import { BASE_URL } from "@/lib/constant/constant";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useState } from "react";
+import { CgSpinnerTwoAlt } from "react-icons/cg";
 
 export function SignupForm() {
   const [passType, setPassType] = useState("password");
   const [confirmpassType, setConfirmPassType] = useState("password");
+  const [loading, setLoading] = useState(false);
   const router = useRouter();
   const form = useForm<z.infer<typeof signupSchema>>({
     resolver: zodResolver(signupSchema),
   });
   async function onSubmit(values: z.infer<typeof signupSchema>) {
+    setLoading(true);
     const fetcher = async (
       url: string,
       values: z.infer<typeof signupSchema>
@@ -62,6 +65,7 @@ export function SignupForm() {
         router.push("/login");
       }, 1000);
     } catch (error: any) {
+      setLoading(false);
       if (error.status === 400) {
         toast.error("Email already exists. Please log in.");
       } else {
@@ -186,11 +190,20 @@ export function SignupForm() {
         <div className="flex justify-between">
           <button
             type="submit"
-            className="hover:scale-[1.03] active:scale-[.97] transition-all ease-in-out relative inline-flex overflow-hidden rounded-sm p-[3px] focus:outline-none active:ring-2 active:ring-slate-400 active:ring-offset-2 focus:ring-offset-slate-50"
+            className={`hover:scale-[1.03] active:scale-[.97] transition-all ease-in-out relative inline-flex overflow-hidden rounded-sm p-[3px] focus:outline-none active:ring-2 active:ring-slate-400 active:ring-offset-2 focus:ring-offset-slate-950 ${
+              loading ? "opacity-25" : "opacity-100"
+            }`}
           >
             <span className="absolute inset-[-1000%] animate-[spin_2s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#E2CBFF_0%,#393BB2_50%,#E2CBFF_100%)]" />
             <span className="inline-flex h-full w-full cursor-pointer items-center justify-center rounded-sm bg-slate-900 px-3 py-2 text-sm font-medium text-white  backdrop-blur-3xl">
-              Sign Up
+              {loading ? (
+                <p className="flex items-center gap-2">
+                  <CgSpinnerTwoAlt className="animate-spin size-4" />
+                  Signin Up
+                </p>
+              ) : (
+                <p>Sign Up</p>
+              )}
             </span>
           </button>
           <Link

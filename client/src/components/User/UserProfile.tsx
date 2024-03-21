@@ -9,6 +9,8 @@ import { IUser } from "@/lib/Zustand/constant";
 import { Button } from "@/components/ui/button";
 import toast, { useToasterStore } from "react-hot-toast";
 import { BASE_URL } from "@/lib/constant/constant";
+import { CgSpinnerTwoAlt } from "react-icons/cg";
+import { set } from "zod";
 
 export const UserProfilePage = () => {
   const { toasts } = useToasterStore();
@@ -19,6 +21,7 @@ export const UserProfilePage = () => {
     (userData as IUser)?.image || ""
   );
   const [isDirty, setIsDirty] = useState<boolean>(false);
+  const [loading, setLoading] = useState(false);
 
   let payload = {
     name: name,
@@ -56,6 +59,7 @@ export const UserProfilePage = () => {
   };
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    setLoading(true);
     e.preventDefault();
     setIsDirty(false);
     const fetcher = async (
@@ -89,10 +93,12 @@ export const UserProfilePage = () => {
         formData
       );
       toast.success(data.message);
+      setLoading(false);
       setTimeout(() => {
         window.location.reload();
-      }, 1000);
+      }, 500);
     } catch (error: any) {
+      setLoading(false);
       if (error.status === 400) {
         toast.error(error.info.message);
       } else {
@@ -180,9 +186,16 @@ export const UserProfilePage = () => {
           variant={"default"}
           className="mt-4 font-semibold"
           type="submit"
-          disabled={!isDirty}
+          disabled={!isDirty || loading}
         >
-          Save Changes
+          {loading ? (
+            <p className="flex items-center gap-2">
+              <CgSpinnerTwoAlt className="animate-spin size-4" />
+              Saving
+            </p>
+          ) : (
+            <p>Save Changes</p>
+          )}
         </Button>
       </div>
     </form>
