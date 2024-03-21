@@ -57,9 +57,10 @@ export const UserProfilePage = () => {
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setIsDirty(false);
     const fetcher = async (
       url: string,
-      
+
       payload: FormData
     ) => {
       const response: any = await fetch(url, {
@@ -120,11 +121,21 @@ export const UserProfilePage = () => {
               width={100}
               priority
             />
+          ) : profilePicture instanceof File ? (
+            <Image
+              src={URL.createObjectURL(profilePicture)}
+              alt="Profile"
+              className="w-full h-full rounded-full"
+              height={100}
+              width={100}
+              priority
+            />
           ) : (
             <div>
               <FaRegUserCircle className="flex items-center justify-center w-full h-full bg-stone-800 p-4 rounded-full" />
             </div>
           )}
+
           <label
             htmlFor="profilePictureInput"
             className="absolute bottom-0 right-0 z-10 flex items-center justify-center w-8 h-8 bg-blue-600 rounded-full cursor-pointer hover:bg-gray-500"

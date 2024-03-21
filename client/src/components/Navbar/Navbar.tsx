@@ -138,7 +138,7 @@ export default function NextNavComponent() {
                   color="secondary"
                 />
               ) : (
-                <p className="size-8 flex items-center justify-center bg-[#1f2937] rounded-full">
+                <p className="size-8 flex items-center justify-center bg-[#1f2937] rounded-full cursor-pointer">
                   {(userData as IUser).name
                     .split(" ")[0]
                     .charAt(0)
