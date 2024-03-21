@@ -113,7 +113,11 @@ class AuthController {
 
   static async logout(req, res) {
     try {
-      res.clearCookie("jwtoken");
+      res.clearCookie("jwtoken", {
+        httpOnly: true,
+        secure: true,
+        sameSite: "None",
+      });
       return res.status(200).json({ message: "Logged out successfully" });
     } catch (error) {
       return res.status(500).json({
