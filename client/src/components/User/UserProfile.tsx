@@ -8,6 +8,7 @@ import { authStore } from "@/lib/Zustand/store";
 import { IUser } from "@/lib/Zustand/constant";
 import { Button } from "@/components/ui/button";
 import toast, { useToasterStore } from "react-hot-toast";
+import { BASE_URL } from "@/lib/constant/constant";
 
 export const UserProfilePage = () => {
   const { toasts } = useToasterStore();
@@ -18,6 +19,15 @@ export const UserProfilePage = () => {
     (userData as IUser)?.image || ""
   );
   const [isDirty, setIsDirty] = useState<boolean>(false);
+
+  let payload = {
+    name: name,
+    profile: profilePicture,
+  };
+
+  let formData = new FormData();
+  formData.append("name", name);
+  formData.append("profile", profilePicture);
 
   useEffect(() => {
     setIsDirty(
@@ -45,14 +55,54 @@ export const UserProfilePage = () => {
     }
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setIsDirty(false);
+    const fetcher = async (
+      url: string,
+      
+      payload: FormData
+    ) => {
+      const response: any = await fetch(url, {
+        method: "PUT",
+        credentials: "include",
+        body: payload,
+      });
+
+      if (!response.ok) {
+        const error: any = new Error(
+          "An error occurred while registering the user"
+        );
+
+        // Attach extra info to the error object.
+        error.info = await response.json();
+        error.status = response.status;
+        error.message = "An error occurred while registering the user";
+        throw error;
+      }
+      return response.json();
+    };
+
+    try {
+      const data = await fetcher(
+        `${BASE_URL}/profile/update/${(userData as IUser).id}`,
+        formData
+      );
+      toast.success(data.message);
+      setTimeout(() => {
+        window.location.reload();
+      }, 1000);
+    } catch (error: any) {
+      if (error.status === 400) {
+        toast.error(error.info.message);
+      } else {
+        toast.error("Server is Broken. Please Try Again");
+      }
+    }
   };
 
   return (
     <form
-      onSubmit={handleSubmit}
+      onSubmit={onSubmit}
       className="flex justify-center h-screen w-full pt-10"
     >
       <div className="w-1/4 flex justify-center">
