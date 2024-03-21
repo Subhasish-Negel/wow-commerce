@@ -18,17 +18,3 @@ export const fetchUserData = async () => {
     return {};
   }
 };
-
-// Check if a cookie exists by name
-export function checkCookieExists(cookieName: string) {
-  if (typeof document !== "undefined") {
-    const cookies = document.cookie.split("; ");
-    for (const cookie of cookies) {
-      const [name] = cookie.split("=");
-      if (name === cookieName) {
-        return true;
-      }
-    }
-  }
-  return false;
-}

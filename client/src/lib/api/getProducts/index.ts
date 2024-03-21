@@ -39,10 +39,8 @@ export const fetchProducts = async ({
       }sortField=${sortField}&sortOrder=${sortOrder}`;
     }
 
-
-
     const response = await fetch(url, {
-      credentials: "include",
+      // credentials: "include",
       headers: {
         "Content-Type": "application/json",
       },

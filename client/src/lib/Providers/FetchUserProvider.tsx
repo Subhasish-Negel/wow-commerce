@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { checkCookieExists, fetchUserData } from "@/lib/api/FetchUser";
+import { fetchUserData } from "@/lib/api/FetchUser";
 import { authStore } from "@/lib/Zustand/store";
 import { fetcher } from "@/lib/api/CheckAuth";
 import toast from "react-hot-toast";
@@ -18,7 +18,6 @@ export default function FetchUserProvider({
 }: ProtectedUserProps) {
   const router = useRouter();
   const { userData, setUserData } = authStore();
-  const token = checkCookieExists("jwtoken");
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false); // Initially set to true
 
   useEffect(() => {
@@ -40,7 +39,7 @@ export default function FetchUserProvider({
         }
       }
 
-      if (objectLength < 1 && token) {
+      if (objectLength < 1) {
         const user = await fetchUserData();
         setUserData(user);
       }
@@ -48,7 +47,7 @@ export default function FetchUserProvider({
     };
 
     fetchUser();
-  }, [isProtected, router, setUserData, token, userData]);
+  }, [isProtected, router, setUserData, userData]);
 
   if (!isAuthenticated) {
     return (
