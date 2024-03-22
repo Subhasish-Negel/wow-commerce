@@ -21,8 +21,8 @@ app.use(helmet.crossOriginResourcePolicy({ policy: "cross-origin" }));
 app.use(helmet.hsts());
 app.use(helmet.frameguard({ action: "deny" }));
 app.use(helmet.xssFilter());
-app.use(speedLimiter);
 app.disable("x-powered-by");
+// app.use(speedLimiter);
 
 app.use(
   cors({
