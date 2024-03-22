@@ -199,7 +199,9 @@ export class ProductController {
       const newImageName = generateRandomNum() + "." + imgEXT[1];
       const uploadPath = process.cwd() + "/public/images/blog/" + newImageName;
       await image.mv(uploadPath, (err) => {
-        if (err) throw err;
+        if (err) {
+          console.error(err);
+        }
       });
       payload.user_id = user.id;
 
@@ -269,7 +271,9 @@ export class ProductController {
       const newImageName = generateRandomNum() + "." + imgEXT[1];
       const uploadPath = process.cwd() + "/public/images/blog/" + newImageName;
       await image.mv(uploadPath, (err) => {
-        if (err) throw err;
+        if (err) {
+          console.error(err);
+        }
       });
 
       // upload image URL on cloudinary
@@ -384,7 +388,9 @@ export class ProductController {
         const uploadPath =
           process.cwd() + "/public/images/blog/" + newImageName;
         await image.mv(uploadPath, (err) => {
-          if (err) throw err;
+          if (err) {
+            console.error(err);
+          }
         });
 
         // Upload image on cloudinary
