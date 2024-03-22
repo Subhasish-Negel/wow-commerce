@@ -5,7 +5,7 @@ import fileUpload from "express-fileupload";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import helmet from "helmet";
-import { limiter } from "./config/spamLimiter.js";
+// import { limiter } from "./config/spamLimiter.js";
 import logger from "./config/logger.js";
 const app = express();
 const PORT = process.env.PORT || 8000;
@@ -29,7 +29,8 @@ app.use(
     credentials: true,
   })
 );
-app.use(limiter);
+// app.disable("x-powered-by");
+// app.use(limiter);
 
 app.get("/", (req, res) => {
   res.json({ First_Message: "Yoo! You got This" });

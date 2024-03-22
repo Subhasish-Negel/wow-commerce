@@ -94,9 +94,9 @@ export const UserProfilePage = () => {
       );
       toast.success(data.message);
       setLoading(false);
-      setTimeout(() => {
-        window.location.reload();
-      }, 500);
+      // setTimeout(() => {
+      //   window.location.reload();
+      // }, 500);
     } catch (error: any) {
       setLoading(false);
       if (error.status === 400) {
