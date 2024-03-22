@@ -29,7 +29,6 @@ class AuthController {
       const user = await prisma.users.create({ data: payload });
 
       // return res.json({ payload });
-
       return res.json({
         status: 200,
         message: "User Created Successfully.",
