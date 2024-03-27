@@ -1,9 +1,9 @@
 "use client";
 
-import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { loginSchema } from "@/lib/schemas/loginSchema";
 import { CgSpinnerTwoAlt } from "react-icons/cg";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { loginSchema } from "@/lib/schemas/loginSchema";
 import toast from "react-hot-toast";
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
 import z from "zod";
@@ -138,12 +138,21 @@ export function LoginForm() {
         <div className="flex justify-between">
           <button
             type="submit"
-            className={`hover:scale-[1.03] active:scale-[.97] transition-all ease-in-out relative inline-flex overflow-hidden rounded-sm p-[3px] focus:outline-none active:ring-2 active:ring-slate-400 active:ring-offset-2 focus:ring-offset-slate-950 ${
-              loading ? "opacity-25" : "opacity-100"
+            disabled={loading}
+            className={`hover:scale-[1.03] disabled:hover:scale-100 active:scale-[.97] transition-all ease-in-out relative inline-flex overflow-hidden rounded-sm p-[3px] focus:outline-none active:ring-2 active:ring-slate-400 active:ring-offset-2 focus:ring-offset-slate-950 ${
+              loading ? "cursor-wait opacity-25" : "cursor-pointer opacity-100"
             }`}
           >
-            <span className="absolute inset-[-1000%] animate-[spin_2s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#E2CBFF_0%,#393BB2_50%,#E2CBFF_100%)]" />
-            <span className="inline-flex h-full w-full cursor-pointer items-center justify-center rounded-sm bg-slate-900 px-4 py-2 text-sm font-medium text-white  backdrop-blur-3xl">
+            <span
+              className={`absolute inset-[-1000%] animate-[spin_2s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#E2CBFF_0%,#393BB2_50%,#E2CBFF_100%)] ${
+                loading ? "cursor-wait" : "cursor-pointer"
+              }`}
+            />
+            <span
+              className={`inline-flex h-full w-full items-center justify-center rounded-sm bg-slate-900 px-4 py-2 text-sm font-medium text-white backdrop-blur-3xl ${
+                loading ? "cursor-wait" : "cursor-pointer"
+              }`}
+            >
               {loading ? (
                 <p className="flex items-center gap-2">
                   <CgSpinnerTwoAlt className="animate-spin size-4" />
