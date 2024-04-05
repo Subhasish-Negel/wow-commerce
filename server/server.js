@@ -26,10 +26,22 @@ app.disable("x-powered-by");
 // app.use(speedLimiter);
 
 app.get("/api/ip-info", (req, res) => {
-  const clientIp = req.headers["x-forwarded-for"] || req.socket.remoteAddress;
+  const clientIpHeader = req.headers["x-forwarded-for"];
+  let clientIp;
+
+  if (clientIpHeader) {
+    // Split the x-forwarded-for header and use the first IP address
+    clientIp = clientIpHeader.split(",")[0].trim();
+  } else {
+    // Fall back to using the connection's remote address
+    clientIp = req.socket.remoteAddress;
+  }
+
+  // Extract the IPv4 address if the client IP is an IPv4-mapped IPv6 address
   const ipv4 = clientIp.includes("::ffff:")
     ? clientIp.split("::ffff:")[1]
     : clientIp;
+
   console.log(ipv4);
   const geoData = geoip.lookup(ipv4);
 
