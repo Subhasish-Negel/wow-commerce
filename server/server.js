@@ -9,6 +9,7 @@ import { speedLimiter } from "./config/spamLimiter.js";
 import logger from "./config/logger.js";
 const app = express();
 const PORT = process.env.PORT || 8000;
+import geoip from "geoip-lite";
 
 // Middileware
 app.use(cookieParser());
@@ -23,6 +24,26 @@ app.use(helmet.frameguard({ action: "deny" }));
 app.use(helmet.xssFilter());
 app.disable("x-powered-by");
 // app.use(speedLimiter);
+
+app.get("/api/ip-info", (req, res) => {
+  const clientIp = req.headers["x-forwarded-for"] || req.socket.remoteAddress;
+  const ipv4 = clientIp.includes("::ffff:")
+    ? clientIp.split("::ffff:")[1]
+    : clientIp;
+  console.log(ipv4);
+  const geoData = geoip.lookup(ipv4);
+
+  const ipInfo = {
+    ipAddress: ipv4,
+    internetProvider: geoData?.org || "Unknown",
+    latitude: geoData?.latitude || 0,
+    longitude: geoData?.longitude || 0,
+    city: geoData?.city || "Unknown",
+    country: geoData?.country || "Unknown",
+  };
+
+  res.status(200).json(ipInfo);
+});
 
 app.use(
   cors({
