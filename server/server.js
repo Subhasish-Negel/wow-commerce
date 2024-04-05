@@ -47,9 +47,6 @@ app.get("/api/ip-info", (req, res) => {
 
   const ipInfo = {
     ipAddress: ipv4,
-    internetProvider: geoData?.org || "Unknown",
-    latitude: geoData?.latitude || 0,
-    longitude: geoData?.longitude || 0,
     city: geoData?.city || "Unknown",
     country: geoData?.country || "Unknown",
   };
