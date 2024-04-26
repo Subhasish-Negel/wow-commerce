@@ -20,17 +20,6 @@ model Users {
   Cart       Cart[]
 }
 
-// model Blogs {
-//   id         String   @id @default(auto()) @map("_id") @db.ObjectId
-//   user_id    String   @db.ObjectId
-//   user       Users    @relation(fields: [user_id], references: [id])
-//   title      String
-//   content    String
-//   image_id   String
-//   created_at DateTime @default(now())
-//   updated_at DateTime @default(now())
-// }
-
 model Products {
   id                 String     @id @default(auto()) @map("_id") @db.ObjectId
   title              String
