@@ -5,7 +5,9 @@ import vine, { errors } from "@vinejs/vine";
 export class CartController {
   static async index(req, res) {
     try {
-      const cart = await prisma.cart.findUnique();
+      const cart = await prisma.cart.findMany({
+        include: { cartItems: true },
+      });
       res.status(200).json(cart);
     } catch (error) {
       res.status(500).json({ error: error.message });
