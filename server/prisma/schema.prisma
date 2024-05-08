@@ -16,7 +16,6 @@ model Users {
   picture_id String?
   created_at DateTime @default(now())
   updated_at DateTime @default(now())
-  // blogs      Blogs[]
   Cart       Cart[]
 }
 
@@ -40,7 +39,7 @@ model Banner {
   title     String
   image_id  String
   createdAt DateTime @default(now())
-  updatedAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Cart {
@@ -48,7 +47,8 @@ model Cart {
   user_id    String     @db.ObjectId
   user       Users      @relation(fields: [user_id], references: [id])
   created_at DateTime   @default(now())
-  cartItems  CartItem[] // One-to-many relationship: A cart can have multiple cart items
+  updated_at DateTime   @updatedAt
+  cartItems  CartItem[]
 }
 
 model CartItem {
@@ -58,5 +58,4 @@ model CartItem {
   product_id String   @db.ObjectId
   product    Products @relation(fields: [product_id], references: [id])
   quantity   Int
-  price      Int
 }
