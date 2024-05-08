@@ -1,4 +1,6 @@
-import { prisma } from "../db/db.config";
+import { prisma } from "../db/db.config.js";
+import { cartItemSchema } from "../validations/cartValidation.js";
+import vine, { errors } from "@vinejs/vine";
 
 export class CartController {
   static async index(req, res) {
@@ -13,13 +15,21 @@ export class CartController {
   static async addToCart(req, res) {
     try {
       const user_id = req.user.id;
-      const product_id = req.body.productId;
-      const quantity = req.body.quantity;
+      const body = req.body;
+
+      const validator = vine.compile(cartItemSchema);
+      const payload = await validator.validate(body);
+      const product_id = payload.productId;
+      const quantity = payload.quantity;
+
+      console.log(user_id);
+      console.log(payload.productId);
 
       let cart = await prisma.cart.findUnique({
-        where: { userId: user_id },
+        where: { user_id: user_id },
         include: { cartItems: true },
       });
+
       if (!cart) {
         cart = await prisma.cart.create({
           data: { user_id: user_id },
@@ -27,28 +37,38 @@ export class CartController {
       }
 
       const alreadyExists = cart.cartItems.find(
-        (item) => item.productId === product_id
+        (item) => item.product_id === product_id
       );
 
       if (alreadyExists) {
-        const updatedCart = await prisma.cart.update({
-          where: { productId: product_id },
+        const updatedCart = await prisma.cartItem.update({
+          where: { product_id: payload.productId },
           data: { quantity: alreadyExists.quantity + quantity },
         });
 
-        res.status(200).json({ status: 200, cartItem: updatedCart });
+        return res.status(200).json({ status: 200, cartItem: updatedCart });
       }
 
       const newCartItem = await prisma.cartItem.create({
         data: {
           cart_id: cart.id,
           product_id: product_id,
+          quantity: quantity,
         },
       });
 
-      res.status(201).json({ status: 201, cartItem: newCartItem });
+      return res.status(201).json({ status: 201, cartItem: newCartItem });
     } catch (error) {
-      res.status(500).json({ status: 500, error: "Internal server error" });
+      if (error instanceof errors.E_VALIDATION_ERROR) {
+        return res.status(400).json({ errors: error.messages });
+      } else {
+        return res.status(500).json({
+          status: 500,
+          message: error.message,
+          announce:
+            "Something Went REALLY Bad With The Server :( Please Try Later ?",
+        });
+      }
     }
   }
 }

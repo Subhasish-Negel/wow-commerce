@@ -44,7 +44,7 @@ model Banner {
 
 model Cart {
   id         String     @id @default(auto()) @map("_id") @db.ObjectId
-  user_id    String     @db.ObjectId
+  user_id    String     @unique @db.ObjectId
   user       Users      @relation(fields: [user_id], references: [id])
   created_at DateTime   @default(now())
   updated_at DateTime   @updatedAt
@@ -55,7 +55,7 @@ model CartItem {
   id         String   @id @default(auto()) @map("_id") @db.ObjectId
   cart_id    String   @db.ObjectId
   cart       Cart     @relation(fields: [cart_id], references: [id])
-  product_id String   @db.ObjectId
+  product_id String   @unique @db.ObjectId
   product    Products @relation(fields: [product_id], references: [id])
   quantity   Int
 }

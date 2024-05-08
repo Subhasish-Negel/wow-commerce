@@ -4,6 +4,7 @@ import ProfileController from "../controllers/ProfileController.js";
 import authMiddlware from "../middlewares/Authentication.js";
 import { ProductController } from "../controllers/ProductController.js";
 import { isAdmin } from "../middlewares/isAdmin.js";
+import { CartController } from "../controllers/CartController.js";
 
 const router = Router();
 
@@ -29,5 +30,9 @@ router.post("/banner/create", authMiddlware, ProductController.createBanner);
 router.post("/blog/create", authMiddlware, ProductController.create);
 router.put("/blog/update/:id", authMiddlware, ProductController.update);
 router.delete("/blog/delete/:id", authMiddlware, ProductController.destroy);
+
+// Cart API
+router.get("/cart", CartController.index);
+router.post("/cart", authMiddlware, CartController.addToCart);
 
 export default router;
