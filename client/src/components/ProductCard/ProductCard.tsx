@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import AddtoCart from "@/components/CustomComponents/AddToCartButton";
+// import AddtoCart from "@/components/CustomComponents/AddToCartButton";
 import { IProduct } from "@/lib/types/products.types";
 import { ProductCardSlider } from "@/components/ProductCard/Product-Card-Slider";
 import { BASE_URL } from "@/lib/constant/constant";
