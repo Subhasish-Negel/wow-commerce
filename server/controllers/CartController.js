@@ -48,7 +48,13 @@ export class CartController {
           data: { quantity: alreadyExists.quantity + quantity },
         });
 
-        return res.status(200).json({ status: 200, cartItem: updatedCart });
+        return res
+          .status(200)
+          .json({
+            status: 200,
+            cartItem: updatedCart,
+            message: "Item Added to Cart",
+          });
       }
 
       const newCartItem = await prisma.cartItem.create({
