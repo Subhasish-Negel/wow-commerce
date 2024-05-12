@@ -19,7 +19,6 @@ export const UserProfilePage = () => {
   const { userData, fetchUserData } = authStore();
   const initialName = (userData as IUser)?.name;
   const [name, setName] = useState<string>((userData as IUser)?.name);
-  console.log(name);
   const [profilePicture, setProfilePicture] = useState<string | File>(
     (userData as IUser)?.image || ""
   );
