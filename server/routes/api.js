@@ -32,7 +32,7 @@ router.put("/blog/update/:id", authMiddlware, ProductController.update);
 router.delete("/blog/delete/:id", authMiddlware, ProductController.destroy);
 
 // Cart API
-router.get("/cart", CartController.index);
+router.get("/cart", authMiddlware, CartController.index);
 router.post("/cart", authMiddlware, CartController.addToCart);
 
 export default router;

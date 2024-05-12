@@ -5,7 +5,9 @@ import vine, { errors } from "@vinejs/vine";
 export class CartController {
   static async index(req, res) {
     try {
-      const cart = await prisma.cart.findMany({
+      const user_id = req.user.id;
+      const cart = await prisma.cart.findUnique({
+        where: { user_id: user_id },
         include: { cartItems: true },
       });
       res.status(200).json(cart);
@@ -24,19 +26,10 @@ export class CartController {
       const product_id = payload.productId;
       const quantity = payload.quantity;
 
-      console.log(user_id);
-      console.log(payload.productId);
-
       let cart = await prisma.cart.findUnique({
         where: { user_id: user_id },
         include: { cartItems: true },
       });
-
-      if (!cart) {
-        cart = await prisma.cart.create({
-          data: { user_id: user_id },
-        });
-      }
 
       const alreadyExists = cart.cartItems.find(
         (item) => item.product_id === product_id
@@ -48,13 +41,11 @@ export class CartController {
           data: { quantity: alreadyExists.quantity + quantity },
         });
 
-        return res
-          .status(200)
-          .json({
-            status: 200,
-            cartItem: updatedCart,
-            message: "Item Added to Cart",
-          });
+        return res.status(200).json({
+          status: 200,
+          cartItem: updatedCart,
+          message: "Item Added to Cart",
+        });
       }
 
       const newCartItem = await prisma.cartItem.create({

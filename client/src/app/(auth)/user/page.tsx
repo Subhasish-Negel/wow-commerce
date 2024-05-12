@@ -1,13 +1,13 @@
 import { Nav } from "@/components/Navbar/Navbar";
 import { UserProfilePage } from "@/components/User/UserProfile";
-import FetchUserProvider from "@/lib/Providers/FetchUserProvider";
+import AuthProtection from "@/lib/Providers/AuthProtection";
 import React from "react";
 import { Toaster } from "react-hot-toast";
 
 const Page = () => {
   return (
     <>
-      <FetchUserProvider isProtected>
+      <AuthProtection isProtected>
         <Toaster
           position="bottom-right"
           reverseOrder={false}
@@ -18,7 +18,7 @@ const Page = () => {
         />
         <Nav />
         <UserProfilePage />
-      </FetchUserProvider>
+      </AuthProtection>
     </>
   );
 };

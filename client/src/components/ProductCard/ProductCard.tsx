@@ -1,4 +1,4 @@
-import Image from "next/image";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 // import AddtoCart from "@/components/CustomComponents/AddToCartButton";
 import { IProduct } from "@/lib/types/products.types";
@@ -11,6 +11,7 @@ interface ProductItemProps {
 }
 
 function ProductCard({ product }: ProductItemProps) {
+  const router = useRouter();
   let payload = {
     productId: product.id,
     quantity: 1,
@@ -47,6 +48,9 @@ function ProductCard({ product }: ProductItemProps) {
     try {
       const data = await fetcher(`${BASE_URL}/cart`, payload);
       toast.success(data.message);
+      setTimeout(() => {
+        router.push("/cart");
+      }, 300);
     } catch (error: any) {
       if (error.status === 400) {
         toast.error(error.info.message);

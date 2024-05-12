@@ -1,7 +1,6 @@
 import { Nav } from "@/components/Navbar/Navbar";
 import ProductsPage from "@/components/ProductList/ProductList";
 import { Banner } from "@/components/banner/Carousel";
-import FetchUserProvider from "@/lib/Providers/FetchUserProvider";
 import { Suspense } from "react";
 
 export default function Home() {

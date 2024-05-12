@@ -27,12 +27,12 @@ class AuthController {
       const salt = bcrypt.genSaltSync(13);
       payload.password = bcrypt.hashSync(payload.password, salt);
       const user = await prisma.users.create({ data: payload });
+      await prisma.cart.create({ data: { user_id: user.id } });
 
       // return res.json({ payload });
       return res.json({
         status: 200,
         message: "User Created Successfully.",
-        user,
       });
     } catch (error) {
       if (error instanceof errors.E_VALIDATION_ERROR) {

@@ -1,6 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { FaRegUserCircle } from "react-icons/fa";
 import { MdOutlineAddAPhoto } from "react-icons/md";
 import { Input } from "@/components/ui/input";
@@ -10,29 +11,31 @@ import { Button } from "@/components/ui/button";
 import toast, { useToasterStore } from "react-hot-toast";
 import { BASE_URL } from "@/lib/constant/constant";
 import { CgSpinnerTwoAlt } from "react-icons/cg";
-import { set } from "zod";
+
 
 export const UserProfilePage = () => {
+  const router = useRouter();
   const { toasts } = useToasterStore();
-  const { userData } = authStore();
-  const initialName = (userData as IUser)?.name || "";
-  const [name, setName] = useState<string>(initialName);
+  const { userData, fetchUserData } = authStore();
+  const initialName = (userData as IUser)?.name;
+  const [name, setName] = useState<string>((userData as IUser)?.name);
+  console.log(name);
   const [profilePicture, setProfilePicture] = useState<string | File>(
     (userData as IUser)?.image || ""
   );
   const [isDirty, setIsDirty] = useState<boolean>(false);
   const [loading, setLoading] = useState(false);
 
-  let payload = {
-    name: name,
-    profile: profilePicture,
-  };
-
   let formData = new FormData();
   formData.append("name", name);
   formData.append("profile", profilePicture);
 
   useEffect(() => {
+    fetchUserData();
+  }, [fetchUserData]);
+
+  useEffect(() => {
+    setName((userData as IUser)?.name);
     setIsDirty(
       name !== initialName || profilePicture !== (userData as IUser)?.image
     );
@@ -41,7 +44,7 @@ export const UserProfilePage = () => {
       .filter((t) => t.visible) // Only consider visible toasts
       .filter((_, i) => i >= 1) // Is toast index over limit?
       .forEach((t) => toast.dismiss(t.id)); // Dismiss – Use toast.remove(t.id) for no exit animation
-  }, [name, profilePicture, initialName, userData, toasts]);
+  }, [initialName, name, profilePicture, toasts, userData]);
 
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setName(e.target.value);
@@ -95,7 +98,7 @@ export const UserProfilePage = () => {
       toast.success(data.message);
       setLoading(false);
       setTimeout(() => {
-        window.location.reload();
+        router.refresh();
       }, 500);
     } catch (error: any) {
       setLoading(false);
@@ -119,7 +122,7 @@ export const UserProfilePage = () => {
               src={
                 profilePicture instanceof File
                   ? URL.createObjectURL(profilePicture)
-                  : profilePicture
+                  : (userData as IUser)?.image
               }
               alt="Profile"
               className="w-full h-full rounded-full"

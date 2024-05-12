@@ -20,9 +20,10 @@ import {
   NavbarMenuToggle,
 } from "@nextui-org/react";
 import { AcmeLogo } from "@/components/Navbar/AcmeLogo";
-import { IUser } from "@/lib/Zustand/constant";
+import { ICart, IUser } from "@/lib/Zustand/constant";
 import { logoutUser } from "@/lib/api/logOut";
-import FetchUserProvider from "@/lib/Providers/FetchUserProvider";
+import AuthProtection from "@/lib/Providers/AuthProtection";
+import { FiShoppingCart } from "react-icons/fi";
 
 interface ProtectedUserProps {
   offer?: boolean;
@@ -40,7 +41,7 @@ export function Nav(props: ProtectedUserProps) {
   }, [toasts]);
 
   return (
-    <FetchUserProvider>
+    <AuthProtection>
       <div className="relative w-full flex flex-col items-center justify-center">
         <NextNavComponent />
         {"offer" in props && (
@@ -57,7 +58,7 @@ export function Nav(props: ProtectedUserProps) {
           }}
         />
       </div>
-    </FetchUserProvider>
+    </AuthProtection>
   );
 }
 
@@ -74,12 +75,27 @@ export default function NextNavComponent() {
     "Help & Feedback",
   ];
   const router = useRouter();
-  const { userData } = authStore();
-  const objectLength = userData ? Object.keys(userData).length : 0;
+
+  const {
+    isAuthenticated,
+    checkAuthStatus,
+    userData,
+    fetchUserData,
+    fetchCart,
+    cart,
+  } = authStore();
 
   const handleLogout = async () => {
     await logoutUser();
   };
+
+  useEffect(() => {
+    fetchUserData();
+    checkAuthStatus();
+    fetchCart();
+  }, [checkAuthStatus, fetchCart, fetchUserData]);
+
+  console.log(cart as ICart);
 
   return (
     <Navbar>
@@ -124,10 +140,25 @@ export default function NextNavComponent() {
         </NavbarItem>
       </NavbarContent>
 
-      <NavbarContent as="div" justify="end">
+      <NavbarContent as="div" justify="end" className="space-x-2">
+        <div className="relative cursor-pointer">
+          {isAuthenticated && (
+            <>
+              {(cart as ICart).cartItems &&
+                (cart as ICart).cartItems.length > 0 && (
+                  <div className="t-0 absolute left-3">
+                    <p className="flex size-4 items-center justify-center rounded-full bg-red-600 p-2 text-xs text-gray-50">
+                      {(cart as ICart).cartItems.length}
+                    </p>
+                  </div>
+                )}
+              <FiShoppingCart className="mt-2 size-6" />
+            </>
+          )}
+        </div>
         <Dropdown placement="bottom-end">
           <DropdownTrigger>
-            {objectLength > 1 ? (
+            {isAuthenticated ? (
               (userData as IUser)?.image ? (
                 <Avatar
                   src={(userData as IUser)?.image}
@@ -139,7 +170,7 @@ export default function NextNavComponent() {
                 />
               ) : (
                 <p className="size-8 flex items-center justify-center bg-[#1f2937] rounded-full cursor-pointer">
-                  {(userData as IUser).name
+                  {(userData as IUser)?.name
                     .split(" ")[0]
                     .charAt(0)
                     .toUpperCase()}
@@ -156,7 +187,7 @@ export default function NextNavComponent() {
             )}
           </DropdownTrigger>
           <DropdownMenu aria-label="Profile Actions" variant="flat">
-            {objectLength > 1 ? (
+            {isAuthenticated ? (
               <DropdownItem
                 disableAnimation
                 key="profile"
@@ -175,7 +206,7 @@ export default function NextNavComponent() {
             <DropdownItem key="system">Settings</DropdownItem>
             <DropdownItem key="help_and_feedback">Help & Feedback</DropdownItem>
             <DropdownItem key="contact_us">Contact Us</DropdownItem>
-            {objectLength > 1 ? (
+            {isAuthenticated ? (
               <DropdownItem onClick={handleLogout} key="logout" color="danger">
                 Log Out
               </DropdownItem>
@@ -201,7 +232,7 @@ export default function NextNavComponent() {
             </Link>
           </NavbarMenuItem>
         ))}
-        {objectLength > 1 ? (
+        {isAuthenticated ? (
           <NavbarMenuItem key="logout" className="cursor-pointer">
             <Link onClick={handleLogout} color="danger">
               Log Out
