@@ -12,22 +12,23 @@ import toast, { useToasterStore } from "react-hot-toast";
 import { BASE_URL } from "@/lib/constant/constant";
 import { CgSpinnerTwoAlt } from "react-icons/cg";
 
-
 export const UserProfilePage = () => {
   const router = useRouter();
   const { toasts } = useToasterStore();
   const { userData, fetchUserData } = authStore();
   const initialName = (userData as IUser)?.name;
   const [name, setName] = useState<string>((userData as IUser)?.name);
-  const [profilePicture, setProfilePicture] = useState<string | File>(
-    (userData as IUser)?.image || ""
+  const [profilePicture, setProfilePicture] = useState<string | File | null>(
+    (userData as IUser)?.image || null
   );
   const [isDirty, setIsDirty] = useState<boolean>(false);
   const [loading, setLoading] = useState(false);
 
   let formData = new FormData();
   formData.append("name", name);
-  formData.append("profile", profilePicture);
+  if (profilePicture instanceof File) {
+    formData.append("profile", profilePicture);
+  }
 
   useEffect(() => {
     fetchUserData();
@@ -40,9 +41,9 @@ export const UserProfilePage = () => {
     );
 
     toasts
-      .filter((t) => t.visible) // Only consider visible toasts
-      .filter((_, i) => i >= 1) // Is toast index over limit?
-      .forEach((t) => toast.dismiss(t.id)); // Dismiss – Use toast.remove(t.id) for no exit animation
+      .filter((t) => t.visible)
+      .filter((_, i) => i >= 1)
+      .forEach((t) => toast.dismiss(t.id));
   }, [initialName, name, profilePicture, toasts, userData]);
 
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
