@@ -17,7 +17,6 @@ function ProductCard({ product }: ProductItemProps) {
     quantity: 1,
   };
   const addToCart = async () => {
-    console.log(payload);
     const fetcher = async (
       url: string,
       data: { productId: string; quantity: number }

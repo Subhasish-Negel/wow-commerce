@@ -95,8 +95,6 @@ export default function NextNavComponent() {
     fetchCart();
   }, [checkAuthStatus, fetchCart, fetchUserData]);
 
-  console.log(cart as ICart);
-
   return (
     <Navbar>
       <NavbarContent className="sm:hidden" justify="start">
