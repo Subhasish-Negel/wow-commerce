@@ -1,7 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
 import { FaRegUserCircle } from "react-icons/fa";
 import { MdOutlineAddAPhoto } from "react-icons/md";
 import { Input } from "@/components/ui/input";
@@ -13,29 +12,31 @@ import { BASE_URL } from "@/lib/constant/constant";
 import { CgSpinnerTwoAlt } from "react-icons/cg";
 
 export const UserProfilePage = () => {
-  const router = useRouter();
   const { toasts } = useToasterStore();
   const { userData, fetchUserData } = authStore();
-  const initialName = (userData as IUser)?.name;
+
   const [name, setName] = useState<string>((userData as IUser)?.name);
-  const [profilePicture, setProfilePicture] = useState<string | File | null>(
-    (userData as IUser)?.image || null
+  const [profilePicture, setProfilePicture] = useState<string | File>(
+    (userData as IUser)?.image || ""
   );
   const [isDirty, setIsDirty] = useState<boolean>(false);
   const [loading, setLoading] = useState(false);
 
   let formData = new FormData();
   formData.append("name", name);
-  if (profilePicture instanceof File) {
-    formData.append("profile", profilePicture);
-  }
+  formData.append("profile", profilePicture);
 
   useEffect(() => {
     fetchUserData();
   }, [fetchUserData]);
+  const initialName = (userData as IUser)?.name;
 
   useEffect(() => {
     setName((userData as IUser)?.name);
+    setProfilePicture((userData as IUser)?.image);
+  }, [userData]);
+
+  useEffect(() => {
     setIsDirty(
       name !== initialName || profilePicture !== (userData as IUser)?.image
     );
@@ -98,7 +99,7 @@ export const UserProfilePage = () => {
       toast.success(data.message);
       setLoading(false);
       setTimeout(() => {
-        router.refresh();
+        window.location.reload();
       }, 500);
     } catch (error: any) {
       setLoading(false);
