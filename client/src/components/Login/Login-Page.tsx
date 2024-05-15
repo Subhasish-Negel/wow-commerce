@@ -43,7 +43,7 @@ export default function Login() {
         reverseOrder={false}
         gutter={20}
         toastOptions={{
-          duration: 4000,
+          duration: 3000,
         }}
       />
     </>

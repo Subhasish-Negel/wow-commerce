@@ -45,11 +45,11 @@ function ProductCard({ product }: ProductItemProps) {
     };
 
     try {
-      const data = await fetcher(`${BASE_URL}/cart`, payload);
-      toast.success(data.message);
+      await fetcher(`${BASE_URL}/cart`, payload);
+      toast.success(`${product.title} added to your cart`);
       setTimeout(() => {
-        router.push("/cart");
-      }, 300);
+        window.location.href = "/cart";
+      }, 2000);
     } catch (error: any) {
       if (error.status === 400) {
         toast.error(error.info.message);

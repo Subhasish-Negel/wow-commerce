@@ -44,7 +44,7 @@ export default function Signup() {
         reverseOrder={false}
         gutter={20}
         toastOptions={{
-          duration: 4000,
+          duration: 3000,
         }}
       />
     </>

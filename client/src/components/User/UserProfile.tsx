@@ -14,7 +14,6 @@ import { CgSpinnerTwoAlt } from "react-icons/cg";
 export const UserProfilePage = () => {
   const { toasts } = useToasterStore();
   const { userData, fetchUserData } = authStore();
-
   const [name, setName] = useState<string>((userData as IUser)?.name);
   const [profilePicture, setProfilePicture] = useState<string | File>(
     (userData as IUser)?.image || ""

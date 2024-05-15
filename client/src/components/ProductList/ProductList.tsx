@@ -6,6 +6,7 @@ import { IProduct } from "@/lib/types/products.types";
 import PaginationModule from "@/components/Pagination/Pagination";
 import { usePathname, useSearchParams } from "next/navigation";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
+import toast, { Toaster, useToasterStore } from "react-hot-toast";
 
 interface FetchParams {
   page?: number;
@@ -21,6 +22,8 @@ interface IProps {
 }
 
 const ProductsPage = ({ items, pagination }: IProps) => {
+  const { toasts } = useToasterStore();
+  const TOAST_LIMIT = 1;
   const [products, setProducts] = useState<IProduct[] | null>();
   const [totalPages, setTotalPages] = useState();
   const searchParams = useSearchParams();
@@ -81,6 +84,13 @@ const ProductsPage = ({ items, pagination }: IProps) => {
     sortOrder,
   ]);
 
+  useEffect(() => {
+    toasts
+      .filter((t) => t.visible) // Only consider visible toasts
+      .filter((_, i) => i >= TOAST_LIMIT) // Is toast index over limit?
+      .forEach((t) => toast.dismiss(t.id)); // Dismiss – Use toast.remove(t.id) for no exit animation
+  }, [toasts]);
+
   if (!products && !totalPages) {
     return (
       <div className="h-screen flex flex-col justify-center items-center">
@@ -121,6 +131,14 @@ const ProductsPage = ({ items, pagination }: IProps) => {
           />
         </div>
       )}
+      <Toaster
+        position="bottom-right"
+        reverseOrder={false}
+        gutter={20}
+        toastOptions={{
+          duration: 1700,
+        }}
+      />
     </div>
   );
 };
