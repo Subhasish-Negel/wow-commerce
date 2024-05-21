@@ -6,6 +6,7 @@ import { ProductCardSlider } from "@/components/ProductCard/Product-Card-Slider"
 import { BASE_URL } from "@/lib/constant/constant";
 import toast from "react-hot-toast";
 import { MdOutlineAddShoppingCart } from "react-icons/md";
+import { authStore } from "@/lib/Zustand/store";
 interface ProductItemProps {
   product: IProduct;
 }
@@ -47,9 +48,11 @@ function ProductCard({ product }: ProductItemProps) {
     try {
       await fetcher(`${BASE_URL}/cart`, payload);
       toast.success(`${product.title} added to your cart`);
-      setTimeout(() => {
-        window.location.href = "/cart";
-      }, 2000);
+      // setTimeout(() => {
+      //   router.refresh();
+      // }, 2000);
+
+      authStore.getState().fetchCart();
     } catch (error: any) {
       if (error.status === 400) {
         toast.error(error.info.message);
@@ -58,6 +61,7 @@ function ProductCard({ product }: ProductItemProps) {
       }
     }
   };
+
   return (
     <div className="flex flex-col w-52 sm:w-72 md:w-80 bg-[#18181b] shadow rounded">
       <ProductCardSlider product={product} />
