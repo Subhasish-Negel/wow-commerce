@@ -325,17 +325,17 @@ export class ProductController {
         return res.status(400).json({ error: "Invalid ObjectID" });
       }
 
-      const blog = await prisma.products.findUnique({
+      const product = await prisma.products.findUnique({
         where: {
           id: id,
         },
       });
 
       // Not Found Error Handling
-      if (!blog) {
-        return res.status(404).json({ error: "Blog Not Found" });
+      if (!product) {
+        return res.status(404).json({ error: "product Not Found" });
       }
-      res.json({ status: 200, blog: blog });
+      res.json({ status: 200, product: product });
     } catch (error) {
       logger.log({ level: "error", message: error });
       return res.status(500).json({
