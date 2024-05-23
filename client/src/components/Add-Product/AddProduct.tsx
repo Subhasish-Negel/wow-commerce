@@ -1,280 +1,195 @@
-/**
- * v0 by Vercel.
- * @see https://v0.dev/t/UOciY3GwWD9
- * Documentation: https://v0.dev/docs#integrating-generated-code-into-your-nextjs-app
- */
-import { Label } from "@/components/ui/label";
-import { RadioGroupItem, RadioGroup } from "@/components/ui/radio-group";
-import {
-  SelectValue,
-  SelectTrigger,
-  SelectItem,
-  SelectContent,
-  Select,
-} from "@/components/ui/select";
-import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
+"use client";
+import { User } from "@nextui-org/react";
 import Image from "next/image";
-import { JSX, SVGProps } from "react";
+import { useState } from "react";
+export default function AddProduct() {
+  const [uploadedImages, setUploadedImages] = useState<File[] | []>([]);
 
-export default function Component() {
+  const handleImageUpload = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    index: number
+  ) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const updatedImages = [...uploadedImages];
+      updatedImages[index] = file;
+      setUploadedImages(updatedImages);
+    }
+  };
   return (
-    <div className="grid md:grid-cols-2 items-start max-w-3xl px-4 mx-auto py-6 gap-6 md:gap-12">
-      <div className="grid gap-4 items-start">
-        <div className="flex md:hidden items-start">
-          <div className="grid gap-4">
-            <h1 className="font-bold text-2xl sm:text-3xl">
-              Acme Prism T-Shirt: The Modern Blend of Style and Comfort
-            </h1>
-            <div>
-              <p>60% combed ringspun cotton/40% polyester jersey tee.</p>
-            </div>
-            <div className="flex items-center gap-4">
-              <div className="flex items-center gap-0.5">
-                <StarIcon className="w-5 h-5 fill-primary" />
-                <StarIcon className="w-5 h-5 fill-primary" />
-                <StarIcon className="w-5 h-5 fill-primary" />
-                <StarIcon className="w-5 h-5 fill-muted stroke-muted-foreground" />
-                <StarIcon className="w-5 h-5 fill-muted stroke-muted-foreground" />
-              </div>
-            </div>
-          </div>
-          <div className="text-4xl font-bold ml-auto">$99</div>
+    <div className="flex min-h-screen w-full items-center justify-center bg-gray-100 py-12 px-4 sm:px-6 lg:px-8 dark:bg-gray-900">
+      <div className="w-full max-w-2xl space-y-8">
+        <div>
+          <h2 className="mt-6 text-center text-3xl font-bold tracking-tight text-gray-900 dark:text-gray-50">
+            Add New Product
+          </h2>
         </div>
-        <form className="grid gap-4 md:gap-10">
-          <div className="grid gap-2">
-            <Label className="text-base" htmlFor="color">
-              Color
-            </Label>
-            <RadioGroup
-              className="flex items-center gap-2"
-              defaultValue="black"
-              id="color"
+        <form action="#" className="space-y-6" method="POST">
+          <div>
+            <label
+              className="block text-sm font-medium text-gray-700 dark:text-gray-300"
+              htmlFor="images"
             >
-              <Label
-                className="border cursor-pointer rounded-md p-2 flex items-center gap-2 [&:has(:checked)]:bg-gray-100 dark:[&:has(:checked)]:bg-gray-800"
-                htmlFor="color-black"
-              >
-                <RadioGroupItem id="color-black" value="black" />
-                Black
-              </Label>
-              <Label
-                className="border cursor-pointer rounded-md p-2 flex items-center gap-2 [&:has(:checked)]:bg-gray-100 dark:[&:has(:checked)]:bg-gray-800"
-                htmlFor="color-white"
-              >
-                <RadioGroupItem id="color-white" value="white" />
-                White
-              </Label>
-              <Label
-                className="border cursor-pointer rounded-md p-2 flex items-center gap-2 [&:has(:checked)]:bg-gray-100 dark:[&:has(:checked)]:bg-gray-800"
-                htmlFor="color-blue"
-              >
-                <RadioGroupItem id="color-blue" value="blue" />
-                Blue
-              </Label>
-            </RadioGroup>
+              Product Images
+            </label>
+            <div className="mt-1 grid grid-cols-2 gap-4 sm:grid-cols-4">
+              {[0, 1, 2, 3].map((_, index) => (
+                <div
+                  key={index}
+                  className="relative flex justify-center rounded-md border-2 border-dashed border-gray-300 px-6 pt-5 pb-6 dark:border-gray-600"
+                >
+                  <div className="space-y-1 text-center">
+                    <div className="relative">
+                      {uploadedImages[index] ? (
+                        <Image
+                          alt={`Product Image ${index + 1}`}
+                          className="mx-auto h-24 w-24 rounded-md object-cover"
+                          height={256}
+                          id={`product-image-${index + 1}`}
+                          src={URL.createObjectURL(uploadedImages[index])}
+                          style={{
+                            aspectRatio: "256/256",
+                            objectFit: "cover",
+                          }}
+                          width={256}
+                        />
+                      ) : (
+                        <Image
+                          alt={`Product Image ${index + 1}`}
+                          className="mx-auto h-24 w-24 rounded-md object-cover bg-gray-200" 
+                          height={256}
+                          id={`product-image-${index + 1}`}
+                          src="/user.svg"
+                          style={{
+                            aspectRatio: "256/256",
+                            objectFit: "cover",
+                          }}
+                          width={256}
+                        />
+                      )}
+                      <button
+                        className="absolute top-0 right-0 -mt-2 -mr-2 inline-flex h-6 w-6 items-center justify-center rounded-full bg-gray-900 text-white shadow-lg hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-950 focus:ring-offset-2 dark:bg-gray-50 dark:text-gray-900 dark:hover:bg-gray-200 dark:focus:ring-gray-300"
+                        type="button"
+                        onClick={() => {
+                          const updatedImages = [...uploadedImages];
+
+                          //@ts-ignore
+                          updatedImages[index] = null;
+                          setUploadedImages(updatedImages);
+                        }}
+                      >
+                        <XIcon className="h-4 w-4" />
+                      </button>
+                    </div>
+                    <div className="flex text-sm text-gray-600 dark:text-gray-400">
+                      <label
+                        className="relative cursor-pointer rounded-md bg-white font-medium text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-500 focus-within:ring-offset-2 hover:text-indigo-500 dark:bg-gray-950 dark:text-indigo-400 dark:hover:text-indigo-300"
+                        htmlFor={`image-${index + 1}`}
+                      >
+                        <span>Upload Image</span>
+                        <input
+                          className="sr-only"
+                          id={`image-${index + 1}`}
+                          name="images[]"
+                          onChange={(e) => handleImageUpload(e, index)}
+                          required
+                          type="file"
+                        />
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
-          <div className="grid gap-2">
-            <Label className="text-base" htmlFor="size">
-              Size
-            </Label>
-            <RadioGroup
-              className="flex items-center gap-2"
-              defaultValue="m"
-              id="size"
+          <div>
+            <label
+              className="block text-sm font-medium text-gray-700 dark:text-gray-300"
+              htmlFor="title"
             >
-              <Label
-                className="border cursor-pointer rounded-md p-2 flex items-center gap-2 [&:has(:checked)]:bg-gray-100 dark:[&:has(:checked)]:bg-gray-800"
-                htmlFor="size-xs"
-              >
-                <RadioGroupItem id="size-xs" value="xs" />
-                XS
-              </Label>
-              <Label
-                className="border cursor-pointer rounded-md p-2 flex items-center gap-2 [&:has(:checked)]:bg-gray-100 dark:[&:has(:checked)]:bg-gray-800"
-                htmlFor="size-s"
-              >
-                <RadioGroupItem id="size-s" value="s" />S
-                {"\n                          "}
-              </Label>
-              <Label
-                className="border cursor-pointer rounded-md p-2 flex items-center gap-2 [&:has(:checked)]:bg-gray-100 dark:[&:has(:checked)]:bg-gray-800"
-                htmlFor="size-m"
-              >
-                <RadioGroupItem id="size-m" value="m" />M
-                {"\n                          "}
-              </Label>
-              <Label
-                className="border cursor-pointer rounded-md p-2 flex items-center gap-2 [&:has(:checked)]:bg-gray-100 dark:[&:has(:checked)]:bg-gray-800"
-                htmlFor="size-l"
-              >
-                <RadioGroupItem id="size-l" value="l" />L
-                {"\n                          "}
-              </Label>
-              <Label
-                className="border cursor-pointer rounded-md p-2 flex items-center gap-2 [&:has(:checked)]:bg-gray-100 dark:[&:has(:checked)]:bg-gray-800"
-                htmlFor="size-xl"
-              >
-                <RadioGroupItem id="size-xl" value="xl" />
-                XL
-              </Label>
-            </RadioGroup>
+              Product Title
+            </label>
+            <div className="mt-1">
+              <input
+                autoComplete="title"
+                className="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 dark:border-gray-600 dark:bg-gray-950 dark:text-gray-50 dark:placeholder-gray-400"
+                id="title"
+                name="title"
+                required
+                type="text"
+              />
+            </div>
           </div>
-          <div className="grid gap-2">
-            <Label className="text-base" htmlFor="quantity">
-              Quantity
-            </Label>
-            <Select defaultValue="1">
-              <SelectTrigger className="w-24">
-                <SelectValue placeholder="Select" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="1">1</SelectItem>
-                <SelectItem value="2">2</SelectItem>
-                <SelectItem value="3">3</SelectItem>
-                <SelectItem value="4">4</SelectItem>
-                <SelectItem value="5">5</SelectItem>
-              </SelectContent>
-            </Select>
+          <div>
+            <label
+              className="block text-sm font-medium text-gray-700 dark:text-gray-300"
+              htmlFor="description"
+            >
+              Product Description
+            </label>
+            <div className="mt-1">
+              <textarea
+                className="block w-full rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 dark:border-gray-600 dark:bg-gray-950 dark:text-gray-50 dark:placeholder-gray-400"
+                id="description"
+                name="description"
+                placeholder="Enter product description..."
+                required
+                rows={3}
+              />
+            </div>
           </div>
-          <Button size="lg">Add to cart</Button>
+          <div>
+            <label
+              className="block text-sm font-medium text-gray-700 dark:text-gray-300"
+              htmlFor="price"
+            >
+              Product Price
+            </label>
+            <div className="mt-1">
+              <input
+                className="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 dark:border-gray-600 dark:bg-gray-950 dark:text-gray-50 dark:placeholder-gray-400"
+                id="price"
+                name="price"
+                required
+                type="number"
+              />
+            </div>
+          </div>
+          <div>
+            <button
+              className="flex w-full justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:bg-indigo-500 dark:hover:bg-indigo-600 dark:focus:ring-indigo-400"
+              type="submit"
+            >
+              Add Product
+            </button>
+          </div>
         </form>
-        <Separator className="border-gray-200 dark:border-gray-800" />
-        <div className="grid gap-4 text-sm leading-loose">
-          <p>
-            Introducing the Acme Prism T-Shirt, a perfect blend of style and
-            comfort for the modern individual. This tee is crafted with a
-            meticulous composition of 60% combed ringspun cotton and 40%
-            polyester jersey, ensuring a soft and breathable fabric that feels
-            gentle against the skin.
-          </p>
-          <p>
-            The design of the Acme Prism T-Shirt is as striking as it is
-            comfortable. The shirt features a unique prism-inspired pattern that
-            adds a modern and eye-catching touch to your ensemble.
-          </p>
-        </div>
-      </div>
-      <div className="grid gap-3 items-start">
-        <div className="hidden md:flex gap-4 items-start">
-          <button className="border hover:border-gray-900 rounded-lg overflow-hidden transition-colors dark:hover:border-gray-50">
-            <Image
-              alt="Preview thumbnail"
-              className="aspect-square object-cover"
-              height={100}
-              src="/placeholder.svg"
-              width={100}
-            />
-            <span className="sr-only">View Image 1</span>
-          </button>
-          <button className="border hover:border-gray-900 rounded-lg overflow-hidden transition-colors dark:hover:border-gray-50">
-            <Image
-              alt="Preview thumbnail"
-              className="aspect-square object-cover"
-              height={100}
-              src="/placeholder.svg"
-              width={100}
-            />
-            <span className="sr-only">View Image 2</span>
-          </button>
-          <button className="border hover:border-gray-900 rounded-lg overflow-hidden transition-colors dark:hover:border-gray-50">
-            <Image
-              alt="Preview thumbnail"
-              className="aspect-square object-cover"
-              height={100}
-              src="/placeholder.svg"
-              width={100}
-            />
-            <span className="sr-only">View Image 3</span>
-          </button>
-          <button className="border hover:border-gray-900 rounded-lg overflow-hidden transition-colors dark:hover:border-gray-50">
-            <Image
-              alt="Preview thumbnail"
-              className="aspect-square object-cover"
-              height={100}
-              src="/placeholder.svg"
-              width={100}
-            />
-            <span className="sr-only">View Image 4</span>
-          </button>
-          <button className="border hover:border-gray-900 rounded-lg overflow-hidden transition-colors dark:hover:border-gray-50">
-            <Image
-              alt="Preview thumbnail"
-              className="aspect-square object-cover"
-              height={100}
-              src="/placeholder.svg"
-              width={100}
-            />
-            <span className="sr-only">View Image 4</span>
-          </button>
-        </div>
-        <div className="grid gap-4 md:gap-10">
-          <Image
-            alt="Product Image"
-            className="aspect-square object-cover border border-gray-200 w-full rounded-lg overflow-hidden dark:border-gray-800"
-            height={600}
-            src="/placeholder.svg"
-            width={600}
-          />
-          <div className="flex md:hidden items-start">
-            <button className="border hover:border-gray-900 rounded-lg overflow-hidden transition-colors dark:hover:border-gray-50">
-              <Image
-                alt="Preview thumbnail"
-                className="aspect-square object-cover"
-                height={100}
-                src="/placeholder.svg"
-                width={100}
-              />
-              <span className="sr-only">View Image 1</span>
-            </button>
-            <button className="border hover:border-gray-900 rounded-lg overflow-hidden transition-colors dark:hover:border-gray-50">
-              <Image
-                alt="Preview thumbnail"
-                className="aspect-square object-cover"
-                height={100}
-                src="/placeholder.svg"
-                width={100}
-              />
-              <span className="sr-only">View Image 2</span>
-            </button>
-            <button className="border hover:border-gray-900 rounded-lg overflow-hidden transition-colors dark:hover:border-gray-50">
-              <Image
-                alt="Preview thumbnail"
-                className="aspect-square object-cover"
-                height={100}
-                src="/placeholder.svg"
-                width={100}
-              />
-              <span className="sr-only">View Image 3</span>
-            </button>
-            <button className="border hover:border-gray-900 rounded-lg overflow-hidden transition-colors dark:hover:border-gray-50">
-              <Image
-                alt="Preview thumbnail"
-                className="aspect-square object-cover"
-                height={100}
-                src="/placeholder.svg"
-                width={100}
-              />
-              <span className="sr-only">View Image 4</span>
-            </button>
-            <button className="border hover:border-gray-900 rounded-lg overflow-hidden transition-colors dark:hover:border-gray-50">
-              <Image
-                alt="Preview thumbnail"
-                className="aspect-square object-cover"
-                height={100}
-                src="/placeholder.svg"
-                width={100}
-              />
-              <span className="sr-only">View Image 4</span>
-            </button>
-          </div>
-        </div>
       </div>
     </div>
   );
 }
 
-function StarIcon(props: JSX.IntrinsicAttributes & SVGProps<SVGSVGElement>) {
+function UserProfile(props: any) {
+  return (
+    <svg
+      {...props}
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke-width="1.5"
+      stroke="currentColor"
+      className="size-6"
+    >
+      <path
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
+      />
+    </svg>
+  );
+}
+
+function XIcon(props: any) {
   return (
     <svg
       {...props}
@@ -288,7 +203,8 @@ function StarIcon(props: JSX.IntrinsicAttributes & SVGProps<SVGSVGElement>) {
       strokeLinecap="round"
       strokeLinejoin="round"
     >
-      <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+      <path d="M18 6 6 18" />
+      <path d="m6 6 12 12" />
     </svg>
   );
 }
