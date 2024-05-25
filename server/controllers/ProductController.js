@@ -47,6 +47,7 @@ export class ProductController {
             ],
           },
         });
+
         query.where = {
           OR: [
             { title: { contains: search, mode: "insensitive" } },
@@ -54,29 +55,64 @@ export class ProductController {
             { description: { contains: search, mode: "insensitive" } },
           ],
         };
+
         count = filteredCount;
       }
+
       const totalPages = Math.ceil(count / limit);
 
       // Add sorting conditions if both sortField and sortOrder parameters exist
       if (sortField && sortOrder) {
-        query.orderBy = {
-          [sortField]: sortOrder,
-        };
+        query.orderBy = { [sortField]: sortOrder };
       }
 
       // Fetch products based on the combined query
       const products = await prisma.products.findMany(query);
-      page = Number(page);
 
+      // Map over the products and fetch image URLs from Cloudinary
+      const productsWithImageUrls = await Promise.all(
+        products.map(async (product) => {
+          const { thumbnail, images } = product;
+
+          // Fetch the thumbnail URL from Cloudinary
+          const thumbnailUrl = cloudinary.url(thumbnail, {
+            secure: true,
+            transformation: [
+              { width: 500, height: 500, crop: "fill" },
+              { quality: "auto:low" },
+            ],
+          });
+
+          // Fetch the image URLs from Cloudinary
+          const imageUrls = await Promise.all(
+            images.map((imageId) =>
+              cloudinary.url(imageId, {
+                secure: true,
+                transformation: [
+                  { width: 500, height: 500, crop: "fill" },
+                  { quality: "auto" },
+                ],
+              })
+            )
+          );
+
+          return {
+            ...product,
+            thumbnail: thumbnailUrl,
+            images: imageUrls,
+          };
+        })
+      );
+
+      page = Number(page);
       return res
         .status(200)
         .cookie("page", page)
         .json({
           status: 200,
-          products: products,
+          products: productsWithImageUrls,
           metadata: {
-            currentItems: products.length,
+            currentItems: productsWithImageUrls.length,
             totalItems: count,
             currentPage: page,
             totalPages,
@@ -95,21 +131,36 @@ export class ProductController {
           id: true,
           title: true,
           brand: true,
-          thumbnail: true,
+          thumbnail: true, // Include the thumbnail ID for generating the URL
           category: true,
           description: true,
         },
       });
 
-      return res.json({
-        status: 200,
-        products: itemsForSearch,
+      const productsWithThumbnailUrls = itemsForSearch.map((product) => {
+        const { thumbnail } = product;
+
+        // Fetch the thumbnail URL from Cloudinary
+        const thumbnailUrl = cloudinary.url(thumbnail, {
+          secure: true,
+          transformation: [
+            { width: 500, height: 500, crop: "fill" },
+            { fetch_format: "auto" }, // Use f_auto for efficient format
+            { quality: "auto:low" }, // Use lower quality for smaller file size
+          ],
+        });
+
+        return {
+          ...product,
+          thumbnail: thumbnailUrl, // Replace the thumbnail ID with the URL
+        };
       });
+
+      return res.json({ status: 200, products: productsWithThumbnailUrls });
     } catch (error) {
-      return res.status(500).json({
-        status: 500,
-        error: "Internal server error",
-      });
+      return res
+        .status(500)
+        .json({ status: 500, error: "Internal server error" });
     }
   }
 
@@ -335,7 +386,40 @@ export class ProductController {
       if (!product) {
         return res.status(404).json({ error: "product Not Found" });
       }
-      res.json({ status: 200, product: product });
+
+      const { thumbnail, images } = product;
+
+      // Fetch the thumbnail URL from Cloudinary
+      const thumbnailUrl = cloudinary.url(thumbnail, {
+        secure: true,
+        transformation: [
+          { width: 500, height: 500, crop: "fill" },
+          { fetch_format: "auto" },
+          { quality: "auto" },
+        ],
+      });
+
+      // Fetch the image URLs from Cloudinary
+      const imageUrls = await Promise.all(
+        images.map((imageId) =>
+          cloudinary.url(imageId, {
+            secure: true,
+            transformation: [
+              { width: 500, height: 500, crop: "fill" },
+              { fetch_format: "auto" },
+              { quality: "auto:low" },
+            ],
+          })
+        )
+      );
+
+      const productWithUrls = {
+        ...product,
+        thumbnail: thumbnailUrl,
+        images: imageUrls,
+      };
+
+      res.json({ status: 200, product: productWithUrls });
     } catch (error) {
       logger.log({ level: "error", message: error });
       return res.status(500).json({

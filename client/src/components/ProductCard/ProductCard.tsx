@@ -64,7 +64,9 @@ function ProductCard({ product }: ProductItemProps) {
 
   return (
     <div className="flex flex-col w-52 sm:w-72 md:w-80 bg-[#18181b] shadow rounded">
-      <ProductCardSlider product={product} />
+      <Link href={`/products/${product.id}`}>
+        <ProductCardSlider product={product} />
+      </Link>
       <div className="p-4 flex flex-col items-center">
         <Link
           className="border-b border-transparent hover:border-b-white h-[40px]"

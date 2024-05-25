@@ -39,8 +39,7 @@ export function ProductCardSlider({ product }: ProductItemProps) {
           <CarouselItem key={index}>
             <div className="p-1 flex items-center justify-center">
               <Link
-                // href={`/products/${product.id}`}
-                href={`#`}
+                href={`/products/${product.id}`}
                 className="h-32 sm:h-40 md:h-48 w-52 sm:w-72 md:w-80 bg-gray-200 flex flex-col justify-between bg-cover bg-center rounded-t"
               >
                 <Image

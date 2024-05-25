@@ -118,9 +118,14 @@ export default function Product() {
       <div className="grid gap-4 items-start">
         <div className="flex items-start">
           <div className="grid gap-4">
-            <h1 className="font-bold text-2xl sm:text-3xl">
-              {(product as IProduct).title}
-            </h1>
+            <div className="gap-2">
+              <h1 className="font-bold text-2xl sm:text-3xl">
+                {(product as IProduct).title}
+              </h1>
+              <div className="text-sm text-gray-400 font-bold">{`${
+                (product as IProduct).brand
+              }`}</div>
+            </div>
 
             <div className="flex items-center gap-4">
               <div className="flex items-center gap-0.5">
@@ -132,10 +137,11 @@ export default function Product() {
               </div>
             </div>
           </div>
-          <div className="text-4xl font-bold ml-auto">{`$ ${
-            (product as IProduct).price
-          }`}</div>
         </div>
+
+        <div className="text-4xl font-bold">{`$ ${
+          (product as IProduct).price
+        }`}</div>
         <form className="grid gap-4 md:gap-10">
           <div className="grid gap-2">
             <Label className="text-base" htmlFor="quantity">
