@@ -58,7 +58,7 @@ const SearchBar = () => {
   };
 
   return (
-    <div className="z-50 relative group w-full sm:w-5/6 md:w-2/3 xl:w-1/2 mx-auto py-6">
+    <div className="z-40 relative group w-full sm:w-5/6 md:w-2/3 xl:w-1/2 mx-auto py-6">
       <Input
         radius="full"
         size="sm"

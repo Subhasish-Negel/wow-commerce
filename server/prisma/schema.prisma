@@ -15,7 +15,7 @@ model Users {
   password   String
   picture_id String?
   created_at DateTime @default(now())
-  updated_at DateTime @default(now())
+  updated_at DateTime @updatedAt
   Cart       Cart[]
 }
 

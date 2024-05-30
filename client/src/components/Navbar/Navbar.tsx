@@ -63,17 +63,7 @@ export function Nav(props: ProtectedUserProps) {
 }
 
 export default function NextNavComponent() {
-  const menuItems = [
-    "Profile",
-    "Dashboard",
-    "Activity",
-    "Analytics",
-    "System",
-    "Deployments",
-    "My Settings",
-    "Team Settings",
-    "Help & Feedback",
-  ];
+  const menuItems = ["Brands", "Category", "All Products"];
   const router = useRouter();
 
   const {
@@ -96,7 +86,7 @@ export default function NextNavComponent() {
   }, [checkAuthStatus, fetchCart, fetchUserData]);
 
   return (
-    <Navbar>
+    <Navbar className="z-50">
       <NavbarContent className="sm:hidden" justify="start">
         <NavbarMenuToggle />
       </NavbarContent>
