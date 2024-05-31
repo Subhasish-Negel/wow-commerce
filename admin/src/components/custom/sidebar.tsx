@@ -15,7 +15,7 @@ import {
 import Image from "next/image";
 
 const sidebarItems = [
-  { name: "Dashboard", icon: HomeIcon, url: "/dashboard" },
+  { name: "Dashboard", icon: HomeIcon, url: "/" },
   { name: "Add Product", icon: PlusIcon, url: "/add-product" },
   { name: "Products", icon: PackageIcon, url: "/edit-products" },
   { name: "Customers", icon: UsersIcon, url: "/customers" },

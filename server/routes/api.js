@@ -5,6 +5,7 @@ import authMiddlware from "../middlewares/Authentication.js";
 import { ProductController } from "../controllers/ProductController.js";
 import { isAdmin } from "../middlewares/isAdmin.js";
 import { CartController } from "../controllers/CartController.js";
+import { AdminController } from "../controllers/AdminController.js";
 
 const router = Router();
 
@@ -12,6 +13,9 @@ const router = Router();
 router.post("/auth/register", AuthController.register);
 router.post("/auth/login", AuthController.login);
 router.post("/auth/logout", AuthController.logout);
+
+// Admin Login
+router.post("/auth/admin/login", AdminController.login);
 
 // Profile Operations
 router.get("/profile", authMiddlware, ProfileController.index);

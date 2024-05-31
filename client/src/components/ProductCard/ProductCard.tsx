@@ -1,6 +1,5 @@
-import { useRouter } from "next/navigation";
+
 import Link from "next/link";
-// import AddtoCart from "@/components/CustomComponents/AddToCartButton";
 import { IProduct } from "@/lib/types/products.types";
 import { ProductCardSlider } from "@/components/ProductCard/Product-Card-Slider";
 import { BASE_URL } from "@/lib/constant/constant";
@@ -12,7 +11,6 @@ interface ProductItemProps {
 }
 
 function ProductCard({ product }: ProductItemProps) {
-  const router = useRouter();
   let payload = {
     productId: product.id,
     quantity: 1,
