@@ -16,6 +16,7 @@ import Image from "next/image";
 
 const sidebarItems = [
   { name: "Dashboard", icon: HomeIcon, url: "/dashboard" },
+  { name: "Add Product", icon: PlusIcon, url: "/add-product" },
   { name: "Products", icon: PackageIcon, url: "/edit-products" },
   { name: "Customers", icon: UsersIcon, url: "/customers" },
   { name: "Banned Users", icon: BanIcon, url: "/banned-users" },
@@ -159,6 +160,26 @@ function BanIcon(props: any) {
     >
       <circle cx="12" cy="12" r="10" />
       <path d="m4.9 4.9 14.2 14.2" />
+    </svg>
+  );
+}
+
+function PlusIcon(props: any) {
+  return (
+    <svg
+      {...props}
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M5 12h14" />
+      <path d="M12 5v14" />
     </svg>
   );
 }
