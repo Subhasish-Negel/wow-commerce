@@ -30,6 +30,7 @@ model Products {
   brand              String
   category           String
   thumbnail          String
+  quantity           Int?
   images             String[]
   CartItem           CartItem[]
 }
@@ -46,6 +47,7 @@ model Cart {
   id         String     @id @default(auto()) @map("_id") @db.ObjectId
   user_id    String     @unique @db.ObjectId
   user       Users      @relation(fields: [user_id], references: [id])
+  quantity   Int?
   created_at DateTime   @default(now())
   updated_at DateTime   @updatedAt
   cartItems  CartItem[]

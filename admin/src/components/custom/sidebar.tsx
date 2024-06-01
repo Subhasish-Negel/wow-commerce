@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
@@ -13,6 +13,9 @@ import {
   DropdownMenuItem,
 } from "@/components/ui/dropdown-menu";
 import Image from "next/image";
+import { logoutUser } from "@/lib/api/logOut";
+import { authStore } from "@/lib/Zustand/store";
+import { IUser } from "@/lib/Zustand/constant";
 
 const sidebarItems = [
   { name: "Dashboard", icon: HomeIcon, url: "/" },
@@ -28,8 +31,18 @@ interface Props {
   currentPage: string;
 }
 
+const handleLogout = async () => {
+  await logoutUser();
+};
+
 export default function Sidebar({ children, currentPage }: Props) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
+  const { fetchUserData, userData } = authStore();
+
+  useEffect(() => {
+    fetchUserData();
+  }, [fetchUserData]);
 
   return (
     <div className="grid min-h-screen w-full lg:grid-cols-[280px_1fr]">
@@ -80,15 +93,14 @@ export default function Sidebar({ children, currentPage }: Props) {
             <div className="flex items-center gap-4">
               <Avatar className="h-9 w-9">
                 <Image
-                  src="/placeholder.svg"
+                  src={(userData as IUser)?.image}
                   alt="@shadcn"
                   height={100}
                   width={100}
                 />
-                <AvatarFallback>JP</AvatarFallback>
               </Avatar>
               <div className="grid gap-0.5">
-                <div className="font-medium">Jared Palmer</div>
+                <div className="font-medium">{(userData as IUser)?.name}</div>
                 <div className="text-sm text-gray-500 dark:text-gray-400">
                   Admin
                 </div>
@@ -113,20 +125,15 @@ export default function Sidebar({ children, currentPage }: Props) {
           </div>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button
-                variant="ghost"
-                size="icon"
-                className="rounded-full border border-gray-200 w-8 h-8 dark:border-gray-800"
-              >
+              <Avatar className="size-8">
                 <Image
-                  src="/placeholder.svg"
-                  width="32"
-                  height="32"
-                  className="rounded-full"
-                  alt="Avatar"
+                  src={(userData as IUser)?.image}
+                  alt="@shadcn"
+                  height={100}
+                  width={100}
                 />
                 <span className="sr-only">Toggle user menu</span>
-              </Button>
+              </Avatar>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
               <DropdownMenuLabel>My Account</DropdownMenuLabel>
@@ -134,7 +141,7 @@ export default function Sidebar({ children, currentPage }: Props) {
               <DropdownMenuItem>Settings</DropdownMenuItem>
               <DropdownMenuItem>Support</DropdownMenuItem>
               <DropdownMenuSeparator />
-              <DropdownMenuItem>Logout</DropdownMenuItem>
+              <DropdownMenuItem onClick={handleLogout}>Logout</DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </header>

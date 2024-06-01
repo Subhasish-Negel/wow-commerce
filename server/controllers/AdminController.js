@@ -1,5 +1,6 @@
 import Jwt from "jsonwebtoken";
 import { prisma } from "../db/db.config.js";
+import bcrypt from "bcryptjs";
 import vine, { errors } from "@vinejs/vine";
 import { loginSchema } from "../validations/authValidation.js";
 
@@ -17,7 +18,32 @@ class AdminController {
 
       if (findUser) {
         // Check if user is admin
-        if (findUser.role !== "admin") {
+        if (findUser.role === "admin") {
+          if (bcrypt.compareSync(payload.password, findUser.password)) {
+     
+            // Create Login Token
+            const payloadData = {
+              id: findUser.id,
+              role: findUser.role,
+            };
+            const token = Jwt.sign(payloadData, process.env.JWT_SECRET, {
+              expiresIn: "1h",
+            });
+
+            // Set the token as an HttpOnly cookie
+            return res
+              .status(200)
+              .cookie("jwtoken", `Bearer ${token}`, {
+                httpOnly: true,
+                secure: true,
+                sameSite: "None",
+                expires: new Date(Date.now() + 1000 * 3600),
+              })
+              .json({
+                message: "Logged In",
+                access_token: `Bearer ${token}`,
+              });
+          }
           return res.status(403).json({
             error: {
               message: "Unauthorized: Admins only",
@@ -34,19 +60,14 @@ class AdminController {
           expiresIn: "1h",
         });
 
+        console.log(`Bearer ${token}`);
         // Set the token as an HttpOnly cookie
-        return res
-          .status(200)
-          .cookie("jwtoken", `Bearer ${token}`, {
-            httpOnly: true,
-            secure: true,
-            sameSite: "None",
-            expires: new Date(Date.now() + 1000 * 3600),
-          })
-          .json({
-            message: "Admin Logged In",
-            access_token: `Bearer ${token}`,
-          });
+        return res.status(200).cookie("jwtoken", `Bearer ${token}`, {
+          httpOnly: true,
+          secure: true,
+          sameSite: "None",
+          expires: new Date(Date.now() + 1000 * 3600),
+        });
       }
 
       return res.status(401).json({

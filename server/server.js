@@ -37,19 +37,19 @@ app.get("/api/ip-info", (req, res) => {
     clientIp = req.socket.remoteAddress;
   }
 
-  // Extract the IPv4 address if the client IP is an IPv4-mapped IPv6 address
-  const ipv4 = clientIp.includes("::ffff:")
-    ? clientIp.split("::ffff:")[1]
-    : clientIp;
+  // // Extract the IPv4 address if the client IP is an IPv4-mapped IPv6 address
+  // const ipv4 = clientIp.includes("::ffff:")
+  //   ? clientIp.split("::ffff:")[1]
+  //   : clientIp;
 
-  console.log(ipv4);
-  const geoData = geoip.lookup(ipv4);
+  // console.log(ipv4);
+  // const geoData = geoip.lookup(ipv4);
 
-  const ipInfo = {
-    ipAddress: ipv4,
-    city: geoData?.city || "Unknown",
-    country: geoData?.country || "Unknown",
-  };
+  // const ipInfo = {
+  //   ipAddress: ipv4,
+  //   city: geoData?.city || "Unknown",
+  //   country: geoData?.country || "Unknown",
+  // };
 
   res.status(200).json(ipInfo);
 });
@@ -69,7 +69,5 @@ app.get("/", (req, res) => {
 
 app.use("/api", ApiRoutes);
 
-// logger
-logger.info("Hey I am just testing fr fr");
 
 app.listen(PORT, () => console.log(`Server is running on ${PORT}`));

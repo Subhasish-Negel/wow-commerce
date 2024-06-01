@@ -27,6 +27,7 @@ export default function Login() {
     try {
       const response = await fetch(`${BASE_URL}/auth/admin/login`, {
         method: "POST",
+        credentials: "include",
         headers: {
           "Content-Type": "application/json",
         },
@@ -38,7 +39,7 @@ export default function Login() {
         toast.success("Login Successful");
         setTimeout(() => {
           router.push("/");
-        }, 1000);
+        }, 1500);
       } else {
         toast.error("UnAuthorized");
       }
@@ -102,7 +103,7 @@ export default function Login() {
         reverseOrder={false}
         gutter={20}
         toastOptions={{
-          duration: 3000,
+          duration: 2000,
         }}
       />
     </div>

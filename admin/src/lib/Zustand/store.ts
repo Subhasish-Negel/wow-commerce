@@ -26,7 +26,6 @@ export const authStore = create<AuthState & AuthActions>((set, get) => ({
         set({ isAuthenticated: false });
       }
     } catch (error) {
-      console.error("Error checking authentication status:", error);
       set({ isAuthenticated: false });
     }
   },

@@ -1,8 +1,13 @@
+import AuthProtection from "@/lib/Providers/AuthProtection";
 import Dashboard from "@/pages/dashboard/Dashboard";
 import React from "react";
 
 const page = () => {
-  return <Dashboard />;
+  return (
+    <AuthProtection>
+      <Dashboard />
+    </AuthProtection>
+  );
 };
 
 export default page;
