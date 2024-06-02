@@ -10,20 +10,20 @@ interface ProtectedUserProps {
 export default function AuthProtection({ children }: ProtectedUserProps) {
   const [loading, setLoading] = useState(true);
   const router = useRouter();
-  const { isAuthenticated, checkAuthStatus } = authStore();
+  const { isAuthenticated, checkAuthStatus, setIsAuthenticated } = authStore();
 
   useEffect(() => {
-    checkAuthStatus();
-    setLoading(false);
+    const checkAuth = async () => {
+      await checkAuthStatus();
+      setLoading(false);
+      if (!isAuthenticated && !loading) {
+        router.push("/login");
+      }
+    };
 
-    if (!isAuthenticated) {
-      router.push("/login");
-    }
-  }, [checkAuthStatus, isAuthenticated, router]);
+    checkAuth();
+  }, [checkAuthStatus, isAuthenticated, loading, router]);
 
-  if (loading) {
-    return null;
-  }
 
-  return isAuthenticated ? <>{children}</> : null;
+  return isAuthenticated && !loading ? <>{children}</> : null;
 }

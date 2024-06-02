@@ -1,12 +1,6 @@
-import {
-  AuthActions,
-  AuthState,
-  IUser,
-  ICart,
-  IProduct,
-} from "@/lib/Zustand/constant";
 import { create } from "zustand";
 import { BASE_URL } from "@/lib/constant/constant";
+import { AuthActions, AuthState, IUser } from "@/lib/Zustand/constant";
 
 export const authStore = create<AuthState & AuthActions>((set, get) => ({
   userData: null,
